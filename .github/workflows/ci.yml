@@ -1,0 +1,35 @@
+name: CI
+
+on: 
+    pull_request:
+    push: 
+        branches:
+            ["main"]
+
+jobs:
+    build: 
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        permissions:
+            contents: read 
+        
+        steps:
+            - name: checkout 
+              uses: actions/checkout@v7
+            
+            - name: instalar .net
+              uses: actions/setup-dotnet@v6
+              with:
+                dotnet-version: '10.0.x'
+
+            - name: instalar dependencias
+              run: dotnet restore
+            
+            - name: compilar
+              run: dotnet build --no-restore
+            
+            - name: executar testes
+              run: dotnet teste --no-restore --no-build
+
+
+        

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MercadoPreso.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+99c33cc9b320a730fb214b291c5b53feec5070fd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0565e30e153236afa40c58292c387cd7e18116b5")]
 [assembly: System.Reflection.AssemblyProductAttribute("MercadoPreso.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MercadoPreso.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

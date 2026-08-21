@@ -2,9 +2,6 @@
 
 services:
   mercadopresoapi:
-    image: mercadopresoapi
-    build:
-      context: .
-      dockerfile: src/MercadoPreso.Api/Dockerfile
+    image: erickbueno/mercadopreso-api:latest
     ports:
       - 5113:5113

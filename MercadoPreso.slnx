@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/MercadoPreso.Api/MercadoPreso.Api.csproj" />
+    <Project Path="src/MercadoPreso.Test/MercadoPreso.Test.csproj" />
   </Folder>
   <Folder Name="/src/Common/">
     <Project Path="src/Common/Common.Domain/Common.Domain.csproj" />

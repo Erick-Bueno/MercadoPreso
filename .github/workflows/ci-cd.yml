@@ -1,0 +1,84 @@
+name: CI
+
+on: 
+    pull_request:
+    push: 
+        branches:
+            ["main"]
+
+jobs:
+    build: 
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        permissions:
+            contents: read 
+        
+        steps:
+            - name: checkout 
+              uses: actions/checkout@v7
+            
+            - name: install .net
+              uses: actions/setup-dotnet@v6
+              with:
+                dotnet-version: '10.0.x'
+
+            - name: install dependencies
+              run: dotnet restore
+            
+            - name: compile
+              run: dotnet build --no-restore
+            
+            - name: run tests
+              run: dotnet teste --no-restore --no-build
+
+    docker-image:
+          runs-on: ubuntu-latest
+          needs: build
+          timeout-minutes: 15
+          permissions:
+              contents: read 
+          
+          steps: 
+              - name: checkout 
+                uses: actions/checkout@v7
+
+              - name: login docker hub
+                uses: docker/login-action@v4
+                with:  
+                  username: ${{ secrets.DOCKERHUB_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_TOKEN }}
+                
+              - name: Set up Docker Buildx
+                uses: docker/setup-buildx-action@v4
+              
+              - name: Build and push
+                uses: docker/build-push-action@v7
+                with:
+                  push: true
+                  tags: user/app:latest
+    deploy: 
+        runs-on: ubuntu-latest
+        needs: [build, docker-image]
+        timeout-minutes: 15
+        permissions:
+              contents: read 
+              
+        steps: 
+              - name: checkout 
+                uses: actions/checkout@v7
+              
+              - name: deploy to hostinger
+                uses: hostinger/deploy-action@v1
+                with: 
+                  api-key: ${{ secrets.HOSTINGER_API_KEY }}
+                  virtual-machine: ${{ vars.HOSTINGER_VM_ID }}
+
+    
+              
+
+          
+
+          
+
+
+        

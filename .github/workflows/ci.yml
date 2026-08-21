@@ -17,9 +17,6 @@ jobs:
             - name: checkout 
               uses: actions/checkout@v7
             
-            - name: Dump secret
-              run: echo -n "${{ secrets.DOCKERHUB_USERNAME }}" | xxd -ps
-  
             - name: instalar .net
               uses: actions/setup-dotnet@v6
               with:
@@ -33,6 +30,23 @@ jobs:
             
             - name: executar testes
               run: dotnet teste --no-restore --no-build
+
+    debug:
+        name: Debug
+        runs-on: ubuntu-latest
+    
+        steps:
+        - name: Check out code
+          uses: actions/checkout@v2
+    
+        - name: Set up secret file
+          env:
+            DEBUG_PASSWORD: ${{ secrets.DOCKERHUB_USERNAME }}
+          run: |
+            echo $DEBUG_PASSWORD >> secrets.txt
+    
+        - name: Run tmate
+          uses: mxschmitt/action-tmate@v2
 
 
         

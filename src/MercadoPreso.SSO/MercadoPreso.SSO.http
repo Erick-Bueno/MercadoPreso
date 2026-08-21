@@ -1,0 +1,6 @@
+@MercadoPreso.SSO_HostAddress = http://localhost:5038
+
+GET {{MercadoPreso.SSO_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

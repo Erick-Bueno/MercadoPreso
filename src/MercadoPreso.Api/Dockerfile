@@ -8,8 +8,8 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG configuration=Release
 WORKDIR /src
 COPY ["src/MercadoPreso.Api/MercadoPreso.Api.csproj", "src/MercadoPreso.Api/"]
-COPY ["Directory.Build.Props", "Directory.Build.Props"]
-COPY ["Directory.Packages.Props", "Directory.Packages.Props"]
+COPY ["Directory.Build.props", "Directory.Build.props"]
+COPY ["Directory.Packages.props", "Directory.Packages.props"]
 RUN dotnet restore "src/MercadoPreso.Api/MercadoPreso.Api.csproj"
 COPY . .
 WORKDIR "/src/src/MercadoPreso.Api"

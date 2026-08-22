@@ -1,4 +1,4 @@
-name: CI
+name: CI-CD
 
 on: 
     pull_request:
@@ -72,6 +72,7 @@ jobs:
                 with: 
                   api-key: ${{ secrets.HOSTINGER_API_KEY }}
                   virtual-machine: ${{ vars.HOSTINGER_VM_ID }}
+                  project-name: mercadopreso
                   docker-compose-path: compose.yaml
 
     

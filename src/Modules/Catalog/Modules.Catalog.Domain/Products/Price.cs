@@ -1,7 +1,7 @@
 using Common.Domain;
 using Common.Domain.Errors;
 
-namespace Modules.Catalog.Domain.Product;
+namespace Modules.Catalog.Domain.Products;
 
 public sealed record Price
 {

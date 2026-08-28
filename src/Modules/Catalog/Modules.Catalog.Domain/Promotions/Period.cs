@@ -1,5 +1,5 @@
 using Common.Domain;
-using Common.Domain.Errors;
+using Modules.Catalog.Domain.Errors;
 
 namespace Modules.Catalog.Domain.Promotions;
 
@@ -18,7 +18,7 @@ public sealed record Period
     {
        if(end < start)
         {
-            return new EndDateCannotBeBeforeStartDate();
+            return PromotionErrors.EndDateCannotBeBeforeStartDate;
         }  
 
         return new Period(start, end);

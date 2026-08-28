@@ -1,7 +1,7 @@
 using System.Collections.ObjectModel;
 using Common.Domain;
-using Common.Domain.Errors;
 using Modules.Catalog.Domain.Enums;
+using Modules.Catalog.Domain.Errors;
 using Modules.Catalog.Domain.Products;
 
 namespace Modules.Catalog.Domain.Promotions;
@@ -13,18 +13,19 @@ public class Promotion : Entity
     public string Title { get; private set; }
     public string? Description { get; private set; }
     public DiscountType DiscountType { get; private set; }
-    public decimal DiscountValue { get; private set; }
+    public Price DiscountValue { get; private set; }
     public Period Period { get; private set; }
     public bool Active { get; private set; }
-    private Collection<Product> _products { get; set; }
+    private Collection<Product> Products { get; set; }
 
     private Promotion(
         string title,
         string? description,
         DiscountType discountType,
-        decimal discountValue,
+        Price discountValue,
         Period period,
-        bool active
+        bool active,
+        Collection<Product> products
     )
     {
         Title = title;
@@ -33,31 +34,42 @@ public class Promotion : Entity
         DiscountValue = discountValue;
         Period = period;
         Active = active;
-        _products = [];
-    } 
+        Products = products;
+    }
 
     public static DomainResult<Promotion> Create(
         string title,
         string? description,
         DiscountType discountType,
-        decimal discountValue,
-        Period period
+        Price discountValue,
+        Period period,
+        Collection<Product> products
     )
     {
-        return new Promotion(title, description, discountType, discountValue, period, true);
+        if (products.Count > MAX_PRODUCTS_IN_PROMOTION)
+        {
+            return PromotionErrors.ProductLimitReached;
+        }
+        return new Promotion(
+            title,
+            description,
+            discountType,
+            discountValue,
+            period,
+            true,
+            products
+        );
     }
 
     public DomainResult<Product> AddProduct(Product product)
     {
-        if(_products.Count > MAX_PRODUCTS_IN_PROMOTION)
+        if (Products.Contains(product))
         {
-            return new ProductLimitReachedForThisPromotion();
+            return PromotionErrors.ProductAlreadyHasAnActivePromotion;
         }
-        if (_products.Contains(product))
-        {
-            return 
-        }
-        _products.Add(product);
+        Products.Add(product);
         return product;
     }
+
+    public bool IsActive() => Active;
 }

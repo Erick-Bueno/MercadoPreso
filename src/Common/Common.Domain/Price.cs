@@ -1,7 +1,6 @@
-using Common.Domain;
 using Common.Domain.Errors;
 
-namespace Modules.Catalog.Domain.Products;
+namespace Common.Domain;
 
 public sealed record Price
 {
@@ -15,7 +14,7 @@ public sealed record Price
     {
         if(value < 0)
         {
-            return new ValueCannotBeNegative();
+            return DomainError.ValueCannotBeNegative;
         }
 
         return new Price(value);

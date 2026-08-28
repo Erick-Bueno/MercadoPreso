@@ -4,15 +4,31 @@ namespace Common.Domain;
 
 public sealed class DomainResult<T>
 {
-    public T? Success { get; private set; } 
-    public DomainError? Failure {get; private set;}
-    public DomainResult(T value){
-        Success = value;
+    private readonly T? _value;
+    public bool IsSuccess { get; }
+    public bool IsFailure => !IsSuccess;
+    public DomainError? Error { get; }
+
+    private DomainResult(T value)
+    {
+        _value = value;
+        IsSuccess = true;
     }
-    public DomainResult(DomainError error){
-        Failure = error;
+    private DomainResult(DomainError error)
+    {
+        Error = error;
+        IsSuccess = false;
     }
 
-    public static implicit operator DomainResult<T> (T value) => new(value);
-    public static implicit operator DomainResult<T> (DomainError error) => new(error);
+    public T? Value =>
+        IsSuccess
+            ? _value
+            : throw new InvalidOperationException(
+                "Não é possível acessar o valor de um resultado com falha."
+            );    
+
+
+    public static implicit operator DomainResult<T>(T value) => new(value);
+
+    public static implicit operator DomainResult<T>(DomainError error) => new(error);
 }

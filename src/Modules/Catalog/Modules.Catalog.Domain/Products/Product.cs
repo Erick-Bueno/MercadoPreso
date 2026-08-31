@@ -1,46 +1,33 @@
-using System.Collections.ObjectModel;
 using Common.Domain;
 using Modules.Catalog.Domain.Errors;
 
 namespace Modules.Catalog.Domain.Products;
 
-public class Product : Entity
+public class Product : AggregateRoot<ProductId>
 {
-    private const int MINIMUN_IMAGE_QUANTITY = 1;
-
     public string Name { get; private set; } = string.Empty;
     public Price Price { get; private set; }
     public Guid? PromotionId { get; private set; }
-    private Collection<Image> Images { get; set; }
 
-    private Product(string name, Price price, Collection<Image> images)
+    private Product(ProductId id, string name, Price price) : base(id)
     {
         Name = name;
         Price = price;
-        Images = images;
     }
 
-    public static DomainResult<Product> Create(string name, Price price, Collection<Image> images)
+    public static DomainResult<Product> Create(string name, Price price)
     {
 
         if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
         {
             return ProductErrors.ProductNameIsRequired;
         }
-        if(images.Count < MINIMUN_IMAGE_QUANTITY)
-        {
-            return ProductErrors.ProductMustHaveAtLeastOneImage;
-        }
-        return new Product(name, price, images);
-    }
-
-    public DomainResult<Image> AddImage(Image image)
-    {
-        if (Images.Contains(image))
-        {
-            return ProductErrors.CannotAddTheSameImageToTheProduct;
-        }
-        Images.Add(image);
-        return image;
+        return new Product(ProductId.Create(),name, price);
     }
 }
+
+
+public record ProductId(Guid Value)
+{
+    public static ProductId Create() => new(Guid.CreateVersion7());
+};

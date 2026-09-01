@@ -16,7 +16,7 @@
     </PackageVersion>
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
     <PackageVersion Include="Microsoft.OpenApi" Version="2.11.0" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.7" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
     <PackageVersion Include="OpenIddict.Validation.AspNetCore" Version="7.6.0" />
     <PackageVersion Include="OpenIddict.Validation.SystemNetHttp" Version="7.6.0" />

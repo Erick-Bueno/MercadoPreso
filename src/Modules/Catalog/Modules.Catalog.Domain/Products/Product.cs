@@ -1,21 +1,22 @@
 using Common.Domain;
 using Modules.Catalog.Domain.Errors;
+using Modules.Catalog.Domain.Promotions;
 
 namespace Modules.Catalog.Domain.Products;
 
 public class Product : AggregateRoot<ProductId>
 {
     public string Name { get; private set; } = string.Empty;
-    public Price Price { get; private set; }
-    public Guid? PromotionId { get; private set; }
+    public Money Price { get; private set; }
+    public PromotionId? PromotionId { get; private set; }
 
-    private Product(ProductId id, string name, Price price) : base(id)
+    private Product(ProductId id, string name, Money price) : base(id)
     {
         Name = name;
         Price = price;
     }
 
-    public static DomainResult<Product> Create(string name, Price price)
+    public static DomainResult<Product> Create(string name, Money price)
     {
 
         if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))

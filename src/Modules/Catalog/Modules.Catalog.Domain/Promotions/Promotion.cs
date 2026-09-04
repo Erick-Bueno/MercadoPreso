@@ -1,17 +1,18 @@
-using System.Collections.ObjectModel;
 using Common.Domain;
 using Modules.Catalog.Domain.Errors;
-using Modules.Catalog.Domain.Products;
 
 namespace Modules.Catalog.Domain.Promotions;
 
 public class Promotion : AggregateRoot<PromotionId>
 {
-    public string Title { get; private set; }
+    public string Title { get; private set; } = null!;
     public string? Description { get; private set; }
-    public Discount Discount { get; private set; }
-    public Period Period { get; private set; }
+    public Discount Discount { get; private set; } = null!;
+    public Period Period { get; private set; } = null!;
     public bool Active { get; private set; }
+
+    private Promotion()
+        : base(default!) { }
 
     private Promotion(
         string title,

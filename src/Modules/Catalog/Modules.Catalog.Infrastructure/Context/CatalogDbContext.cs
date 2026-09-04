@@ -10,7 +10,7 @@ public class CatalogDbContext : DbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<Promotion> Promotions { get; set; }
 
-    public CatalogDbContext(DbContextOptions options)
+    public CatalogDbContext(DbContextOptions<CatalogDbContext> options)
         : base(options) { }
 
     protected CatalogDbContext() { }

@@ -8,21 +8,19 @@ public record Discount
 {
     private const int MAX_PERCENTAGE = 100;
     public DiscountType DiscountType { get; private set; }
-    public Money Money { get; private set; }
-
-    private Discount(DiscountType discountType, Money money)
+    public Price Price { get; private set; }
+    private Discount(DiscountType discountType, Price price)
     {
         DiscountType = discountType;
-        Money = money;
+        Price = price;
     }
-
-    public static DomainResult<Discount> Create(DiscountType discountType, Money money)
+    public static DomainResult<Discount> Create(DiscountType discountType, Price price)
     {
-        if (discountType == DiscountType.Percentage && (money.Value > MAX_PERCENTAGE))
+        if (discountType == DiscountType.Percentage && (price.Value > MAX_PERCENTAGE))
         {
             return PromotionErrors.InvalidPercentage;
         }
 
-        return new Discount(discountType, money);
+        return new Discount(discountType, price);
     }
 }

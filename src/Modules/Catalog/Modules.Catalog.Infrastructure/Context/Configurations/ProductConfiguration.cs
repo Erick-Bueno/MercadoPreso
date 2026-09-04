@@ -1,3 +1,4 @@
+using Common.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Modules.Catalog.Domain.Products;
@@ -12,7 +13,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.HasKey(p => p.Id);
 
         builder.Property(p => p.Name).IsRequired().HasMaxLength(60);
-        builder.OwnsOne(p => p.Price);
+        
+        builder.Property(p => p.Price)
+            .HasConversion(price => price.Value, value => Price.Create(value).Value);
 
         builder
             .HasOne<Promotion>()

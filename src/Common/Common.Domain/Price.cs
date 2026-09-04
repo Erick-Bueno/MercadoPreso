@@ -5,7 +5,6 @@ namespace Common.Domain;
 public sealed record Price
 {
     public decimal Value { get; }
-
     private Price(decimal value)
     {
         Value = value;

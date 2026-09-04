@@ -1,4 +1,5 @@
 using Common.Domain;
+using Modules.Catalog.Domain.Promotions;
 using Modules.Catalog.Domain.Errors;
 
 namespace Modules.Catalog.Domain.Products;
@@ -7,7 +8,7 @@ public class Product : AggregateRoot<ProductId>
 {
     public string Name { get; private set; } = string.Empty;
     public Price Price { get; private set; }
-    public Guid? PromotionId { get; private set; }
+    public PromotionId? PromotionId { get; private set; }
 
     private Product(ProductId id, string name, Price price) : base(id)
     {

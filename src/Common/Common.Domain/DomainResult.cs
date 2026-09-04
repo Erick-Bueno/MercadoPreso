@@ -20,9 +20,9 @@ public sealed class DomainResult<T>
         IsSuccess = false;
     }
 
-    public T? Value =>
+    public T Value =>
         IsSuccess
-            ? _value
+            ? _value!
             : throw new InvalidOperationException(
                 "Não é possível acessar o valor de um resultado com falha."
             );    

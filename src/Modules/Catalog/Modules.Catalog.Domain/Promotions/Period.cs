@@ -14,7 +14,7 @@ public sealed record Period
         End = end;
     }
 
-    public static DomainResult<Period> Create(DateTime start, DateTime end)
+    public static Result<Period> Create(DateTime start, DateTime end)
     {
        if(end < start)
         {

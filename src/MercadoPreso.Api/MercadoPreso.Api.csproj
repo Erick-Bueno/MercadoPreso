@@ -2,10 +2,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="FastEndpoints"/>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Modules\Catalog\Modules.Catalog.Infrastructure\Modules.Catalog.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Catalog\Modules.Catalog.Endpoints\Modules.Catalog.Endpoints.csproj" />
   </ItemGroup>
 
 </Project>

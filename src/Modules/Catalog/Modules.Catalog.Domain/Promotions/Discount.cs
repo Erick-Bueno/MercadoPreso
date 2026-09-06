@@ -14,7 +14,7 @@ public record Discount
         DiscountType = discountType;
         Price = price;
     }
-    public static DomainResult<Discount> Create(DiscountType discountType, Price price)
+    public static Result<Discount> Create(DiscountType discountType, Price price)
     {
         if (discountType == DiscountType.Percentage && (price.Value > MAX_PERCENTAGE))
         {

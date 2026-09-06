@@ -31,7 +31,7 @@ public class Promotion : AggregateRoot<PromotionId>
         Active = active;
     }
 
-    public static DomainResult<Promotion> Create(
+    public static Result<Promotion> Create(
         string title,
         string? description,
         Discount discount,
@@ -42,7 +42,7 @@ public class Promotion : AggregateRoot<PromotionId>
         {
             return PromotionErrors.InvalidTitle;
         }
-        var promotion = new Promotion(
+        return new Promotion(
             title,
             description,
             discount,
@@ -51,7 +51,6 @@ public class Promotion : AggregateRoot<PromotionId>
             PromotionId.Create()
         );
 
-        return promotion;
     }
 }
 

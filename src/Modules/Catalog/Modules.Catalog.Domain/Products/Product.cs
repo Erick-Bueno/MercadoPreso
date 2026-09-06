@@ -9,6 +9,7 @@ public class Product : AggregateRoot<ProductId>
     public string Name { get; private set; } = string.Empty;
     public Price Price { get; private set; }
     public PromotionId? PromotionId { get; private set; }
+    
 
     private Product(ProductId id, string name, Price price) : base(id)
     {
@@ -16,14 +17,14 @@ public class Product : AggregateRoot<ProductId>
         Price = price;
     }
 
-    public static DomainResult<Product> Create(string name, Price price)
+    public static Result<Product> Create(string name, Price price)
     {
 
         if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
         {
             return ProductErrors.ProductNameIsRequired;
         }
-        return new Product(ProductId.Create(),name, price);
+        return new Product(ProductId.Create(), name, price);
     }
 }
 

@@ -1,6 +1,5 @@
 using FastEndpoints;
 using MercadoPreso.Api;
-using Modules.Catalog.Endpoints;
 using Modules.Catalog.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,10 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
+builder.Services.AddFastEndpoints();
 builder
     .Services
-        .AddCatalogInfrastructure(builder.Configuration)
-        .AddCatalogEndpoints();
+        .AddCatalogInfrastructure(builder.Configuration);
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 var app = builder.Build();
@@ -27,7 +26,14 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.UseFastEndpoints();
+app.UseFastEndpoints(
+    options =>
+    {
+        options.Versioning.Prefix = "v";
+        options.Versioning.DefaultVersion = 1;
+        options.Endpoints.RoutePrefix = "api";
+    }
+);
 
 app.UseExceptionHandler();
 

@@ -9,5 +9,6 @@ public sealed record PromotionErrors
     public static readonly DomainError ProductAlreadyHasAnActivePromotion = new("O produto ja possui uma promoção ativa");
     public static readonly DomainError EndDateCannotBeBeforeStartDate = new("A data final não pode ser antes da data inicial");
     public static readonly DomainError InvalidPercentage = new ("Percentual inválido");
-    public static readonly DomainError InvalidTitle = new ("Titulo de prmoção inválido");
+    public static readonly DomainError InvalidTitle = new ("Titulo de promoção inválido");
+    public static readonly DomainError PromotionNotExists = new("Promoção não existe");
 }

@@ -9,7 +9,7 @@ public class Product : AggregateRoot<ProductId>
     public string Name { get; private set; } = string.Empty;
     public Price Price { get; private set; }
     public PromotionId? PromotionId { get; private set; }
-    
+
 
     private Product(ProductId id, string name, Price price) : base(id)
     {
@@ -24,12 +24,28 @@ public class Product : AggregateRoot<ProductId>
         {
             return ProductErrors.ProductNameIsRequired;
         }
-        return new Product(ProductId.Create(), name, price);
+        return new Product(ProductId.Create(Guid.CreateVersion7()), name, price);
+    }
+
+    public Result ActivatePromotion(PromotionId promotionId)
+    {
+        if (promotionId != null)
+        {
+            return PromotionErrors.ProductAlreadyHasAnActivePromotion;
+        }
+        PromotionId = promotionId;
+        return Result.Success;
     }
 }
 
 
-public record ProductId(Guid Value)
+public record ProductId
 {
-    public static ProductId Create() => new(Guid.CreateVersion7());
+    public Guid Value { get; private set; }
+
+    private ProductId(Guid value)
+    {
+        Value  = value;
+    }
+    public static ProductId Create(Guid value) => new(value);
 };

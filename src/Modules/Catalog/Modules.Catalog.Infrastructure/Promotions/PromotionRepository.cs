@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Modules.Catalog.Application.Promotions.Interfaces;
 using Modules.Catalog.Domain.Promotions;
 using Modules.Catalog.Infrastructure.Context;
@@ -8,8 +9,6 @@ public class PromotionRepository(CatalogDbContext dbContext) : IPromotionReposit
 {
     private readonly CatalogDbContext _dbContext = dbContext;
 
-    public Task GetPromotionById(PromotionId promotionId)
-    {
-        
-    }
+    public async Task<Promotion?> GetPromotionById(PromotionId promotionId) =>
+        await _dbContext.Promotions.FirstOrDefaultAsync(promotion => promotion.Id == promotionId);
 }

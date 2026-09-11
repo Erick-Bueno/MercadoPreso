@@ -1,3 +1,4 @@
+using Common.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +16,7 @@ public static class InfrastructureDependencyInjection
                 options => options.UseNpgsql(configuration.GetConnectionString("default"),
                 o => o.MigrationsHistoryTable("__EFMigrationsHistory", "catalog"))
             );
+            services.AddKeyedScoped<IUnitOfWork, UnitOfWork>("catalog");
             return services;
         }
     }

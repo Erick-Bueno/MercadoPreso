@@ -48,13 +48,17 @@ public class Promotion : AggregateRoot<PromotionId>
             discount,
             period,
             true,
-            PromotionId.Create()
+            PromotionId.Create(Guid.CreateVersion7())
         );
 
     }
 }
-
-public record PromotionId(Guid Value)
+public record PromotionId
 {
-    public static PromotionId Create() => new(Guid.CreateVersion7());
+    public Guid Value { get; private set; }
+    private PromotionId(Guid value)
+    {
+        Value = value;
+    }
+    public static PromotionId Create(Guid Value) => new(Value);
 }

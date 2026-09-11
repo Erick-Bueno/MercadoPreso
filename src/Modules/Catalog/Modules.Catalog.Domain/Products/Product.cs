@@ -29,7 +29,7 @@ public class Product : AggregateRoot<ProductId>
 
     public Result ActivatePromotion(PromotionId promotionId)
     {
-        if (promotionId != null)
+        if (PromotionId != null)
         {
             return PromotionErrors.ProductAlreadyHasAnActivePromotion;
         }

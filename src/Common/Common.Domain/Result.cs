@@ -11,7 +11,7 @@ public class Result
 
     protected Result() => IsSuccess = true;
 
-    protected Result(DomainError error)
+    protected Result(DomainError? error)
     {
         Error = error;
         IsSuccess = false;
@@ -29,7 +29,7 @@ public sealed class Result<T> : Result
     {
         _value = value;
     }
-    private Result(DomainError error) : base(error) { }
+    private Result(DomainError? error) : base(error) { }
 
     public T Value =>
         IsSuccess
@@ -41,5 +41,5 @@ public sealed class Result<T> : Result
 
     public static implicit operator Result<T>(T value) => new(value);
 
-    public static implicit operator Result<T>(DomainError error) => new(error);
+    public static implicit operator Result<T>(DomainError? error) => new(error);
 }

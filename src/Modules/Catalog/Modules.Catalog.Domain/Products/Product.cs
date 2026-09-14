@@ -17,25 +17,19 @@ public class Product : AggregateRoot<ProductId>
         Price = price;
     }
 
-    public static Result<Product> Create(string name, Price price)
-    {
+    public static Result<Product> Create(string name, Price price) =>
+     Result.Create((Name: name, Price: price))
+             .Ensure(
+                properties => string.IsNullOrWhiteSpace(properties.Name),
+                ProductErrors.ProductNameIsRequired)
+             .Map(product => new Product(ProductId.Create(Guid.CreateVersion7()), product.Name, product.Price));
 
-        if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
-        {
-            return ProductErrors.ProductNameIsRequired;
-        }
-        return new Product(ProductId.Create(Guid.CreateVersion7()), name, price);
-    }
 
-    public Result ActivatePromotion(PromotionId promotionId)
-    {
-        if (promotionId != null)
-        {
-            return PromotionErrors.ProductAlreadyHasAnActivePromotion;
-        }
-        PromotionId = promotionId;
-        return Result.Success;
-    }
+    public Result<Unit> ActivatePromotion(PromotionId promotionId) =>
+        Result.Success
+        .Ensure(_ => PromotionId != null, PromotionErrors.ProductAlreadyHasAnActivePromotion)
+        .Tap(unit => PromotionId = promotionId);
+
 }
 
 
@@ -45,7 +39,7 @@ public record ProductId
 
     private ProductId(Guid value)
     {
-        Value  = value;
+        Value = value;
     }
     public static ProductId Create(Guid value) => new(value);
 };

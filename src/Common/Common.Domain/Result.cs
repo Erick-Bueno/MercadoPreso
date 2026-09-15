@@ -2,40 +2,34 @@ using Common.Domain.Errors;
 
 namespace Common.Domain;
 
-public class Result
+public static class Result
 {
-    public bool IsSuccess { get; }
-    public bool IsFailure => !IsSuccess;
-    public DomainError? Error { get; }
-    public static Result Success { get; } = new();
-
-    protected Result() => IsSuccess = true;
-
-    protected Result(DomainError? error)
-    {
-        Error = error;
-        IsSuccess = false;
-    }
-
-    public static implicit operator Result(DomainError error) => new(error);
-
+    public static Result<Unit> Success { get; } = Unit.Value;
+    public static Result<T> Create<T>(T value) => new(value);
 }
-
-public sealed class Result<T> : Result
+public sealed class Result<T>
 {
     private readonly T? _value;
-
-    private Result(T value)
+    private readonly DomainError? _error;
+    public bool IsSuccess => Error is null;
+    public bool IsFailure => Error is not null;
+    public Result(T value)
     {
         _value = value;
     }
-    private Result(DomainError? error) : base(error) { }
-
+    public Result(DomainError? error)
+    {
+        _error = error;
+    }
     public T Value =>
         IsSuccess
             ? _value!
             : throw new InvalidOperationException(
                 "Não é possível acessar o valor de um resultado com falha."
+            );
+
+    public DomainError Error => !IsSuccess ? _error! : throw new InvalidOperationException(
+                "Não é possível acessar o valor de um erro inexistente"
             );
 
 

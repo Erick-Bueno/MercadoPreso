@@ -31,7 +31,6 @@ public static class ResultExtensions
             return result;
         }
 
-
         public Result<T> Bind(Func<T, Result<T>> func)
         {
             if (result.IsFailure)

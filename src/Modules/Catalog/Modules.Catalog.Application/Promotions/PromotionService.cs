@@ -39,11 +39,10 @@ public class PromotionService(
             return ProductErrors.ProductNotExists;
         }
 
-        if(product.ActivatePromotion(promotionId) is {IsFailure: true } result)
+        if (product.ActivatePromotion(promotionId) is { IsFailure: true } result)
         {
             return result.Error;
         }
-        product.ActivatePromotion(promotionId);
 
         await _unitOfWork.SaveChanges(cancellationToken: cancellationToken);
 

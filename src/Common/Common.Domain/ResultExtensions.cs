@@ -19,15 +19,26 @@ public static class ResultExtensions
              Func<T, TOut> mappingFunc
          )
          => result.IsSuccess ? mappingFunc(result.Value) : result.Error;
-        
+
 
         public Result<T> Tap(Action<T> action)
         {
-            if(result.Error is not null)
+            if (result.IsFailure)
             {
                 return result.Error;
             }
-            action()
+            action(result.Value);
+            return result;
+        }
+
+
+        public Result<T> Bind(Func<T, Result<T>> func)
+        {
+            if (result.IsFailure)
+            {
+                return result;
+            }
+            return func(result.Value);
         }
 
     }

@@ -9,7 +9,7 @@ public sealed record Price
     {
         Value = value;
     }
-    public static DomainResult<Price> Create(decimal value)
+    public static Result<Price> Create(decimal value)
     {
         if(value < 0)
         {

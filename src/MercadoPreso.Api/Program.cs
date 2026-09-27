@@ -1,5 +1,7 @@
 using FastEndpoints;
 using MercadoPreso.Api;
+using MercadoPreso.Api.Extensions;
+using Modules.Catalog.Application;
 using Modules.Catalog.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,10 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
+builder.Services.AddGraphql();
 builder.Services.AddFastEndpoints();
 builder
     .Services
         .AddCatalogInfrastructure(builder.Configuration);
+builder.Services.AddCatalogApplication();
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 var app = builder.Build();

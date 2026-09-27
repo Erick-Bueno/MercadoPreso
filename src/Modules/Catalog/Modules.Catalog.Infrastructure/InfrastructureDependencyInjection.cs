@@ -1,4 +1,6 @@
 using Common.Application.Interfaces;
+using Common.Infrastructure;
+using HotChocolate.Execution.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,5 +21,11 @@ public static class InfrastructureDependencyInjection
             services.AddKeyedScoped<IUnitOfWork, UnitOfWork>("catalog");
             return services;
         }
+
+    }
+    extension(IRequestExecutorBuilder builder)
+    {
+        public IRequestExecutorBuilder AddCatalogGraphql()
+        => builder.AddGraphqlToEntities<CatalogDbContext>();
     }
 }

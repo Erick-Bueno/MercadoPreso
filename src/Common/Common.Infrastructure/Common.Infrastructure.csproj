@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
         <PackageReference Include="Microsoft.EntityFrameworkCore" />
+        <PackageReference Include="HotChocolate.AspNetCore" />
+<PackageReference Include="HotChocolate.Data" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common.Application\Common.Application.csproj" />

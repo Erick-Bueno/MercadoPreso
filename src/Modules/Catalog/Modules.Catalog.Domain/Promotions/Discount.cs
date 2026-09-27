@@ -1,4 +1,5 @@
 using Common.Domain;
+using Common.Domain.Extensions;
 using Modules.Catalog.Domain.Enums;
 using Modules.Catalog.Domain.Errors;
 
@@ -14,13 +15,10 @@ public record Discount
         DiscountType = discountType;
         Price = price;
     }
-    public static Result<Discount> Create(DiscountType discountType, Price price)
-    {
-        if (discountType == DiscountType.Percentage && (price.Value > MAX_PERCENTAGE))
-        {
-            return PromotionErrors.InvalidPercentage;
-        }
+    public static Result<Discount> Create(DiscountType discountType, Price price) =>
+        Result.Create((DiscountdiscountType: discountType, Price: price))
+            .Ensure(properties => discountType == DiscountType.Percentage && (properties.Price.Value > MAX_PERCENTAGE), PromotionErrors.InvalidPercentage)
+            .Map(properties => new Discount(properties.DiscountdiscountType, properties.Price));
 
-        return new Discount(discountType, price);
-    }
+
 }

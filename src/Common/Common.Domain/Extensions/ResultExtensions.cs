@@ -1,6 +1,6 @@
 using Common.Domain.Errors;
 
-namespace Common.Domain;
+namespace Common.Domain.Extensions;
 
 public static class ResultExtensions
 {

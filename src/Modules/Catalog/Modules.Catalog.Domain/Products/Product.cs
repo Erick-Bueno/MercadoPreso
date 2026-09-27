@@ -1,6 +1,7 @@
 using Common.Domain;
 using Modules.Catalog.Domain.Promotions;
 using Modules.Catalog.Domain.Errors;
+using Common.Domain.Extensions;
 
 namespace Modules.Catalog.Domain.Products;
 
@@ -27,8 +28,13 @@ public class Product : AggregateRoot<ProductId>
 
     public Result<Unit> ActivatePromotion(PromotionId promotionId) =>
         Result.Success
-        .Ensure(_ => PromotionId != null, PromotionErrors.ProductAlreadyHasAnActivePromotion)
-        .Tap(unit => PromotionId = promotionId);
+        .Ensure(_ => PromotionId != null, ProductErrors.ProductAlreadyHasAnActivePromotion)
+        .Tap(_ => PromotionId = promotionId);
+
+    public Result<Unit> RemovePromotion() => 
+    Result.Success
+        .Ensure(_ => PromotionId == null, ProductErrors.ProductDoesNotHavePromotion)
+        .Tap(_ => PromotionId = null);
 
 }
 

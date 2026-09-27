@@ -43,4 +43,7 @@ public sealed class Result<T>
     public static implicit operator Result<T>(T value) => new(value);
 
     public static implicit operator Result<T>(DomainError? error) => new(error);
+
+    public TMatch Match<TMatch>(Func<T, TMatch> onSuccess, Func<DomainError, TMatch> onError)
+        => IsSuccess ? onSuccess(Value) : onError(Error);
 }

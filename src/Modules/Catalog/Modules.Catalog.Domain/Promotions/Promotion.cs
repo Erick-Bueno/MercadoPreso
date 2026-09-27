@@ -1,4 +1,5 @@
 using Common.Domain;
+using Common.Domain.Extensions;
 using Modules.Catalog.Domain.Errors;
 
 namespace Modules.Catalog.Domain.Promotions;
@@ -37,21 +38,29 @@ public class Promotion : AggregateRoot<PromotionId>
         Discount discount,
         Period period
     )
-    {
-        if (string.IsNullOrEmpty(title) || string.IsNullOrWhiteSpace(title))
-        {
-            return PromotionErrors.InvalidTitle;
-        }
-        return new Promotion(
-            title,
-            description,
-            discount,
-            period,
+    => Result.Create((Title: title, Description: description, Discount: discount, Period: period))
+        .Ensure(_ => string.IsNullOrEmpty(title) || string.IsNullOrWhiteSpace(title), PromotionErrors.InvalidTitle)
+        .Map(properties => new Promotion(
+            properties.Title,
+            properties.Description,
+            properties.Discount,
+            properties.Period,
             true,
             PromotionId.Create(Guid.CreateVersion7())
-        );
+        ));
 
-    }
+    public Result<Unit> Activate()
+     => Result.Success
+            .Ensure(_ => DateTime.UtcNow > Period.End, PromotionErrors.InvalidPromotion)
+            .Tap(_ => Active = true);
+
+    public Result<Unit> Deactivate() =>
+    Result.Success
+            .Ensure(_ => DateTime.UtcNow > Period.End, PromotionErrors.InvalidPromotion)
+            .Tap(_ => Active = false);
+
+
+
 }
 public record PromotionId
 {

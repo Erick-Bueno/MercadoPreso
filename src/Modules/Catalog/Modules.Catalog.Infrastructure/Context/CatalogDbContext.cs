@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Modules.Catalog.Domain.Products;
 using Modules.Catalog.Infrastructure.Context.Converters;
 using Modules.Catalog.Domain.Promotions;
+using Common.Infrastructure.TransactionOutbox;
 
 namespace Modules.Catalog.Infrastructure.Context;
 
@@ -21,4 +22,9 @@ public class CatalogDbContext(DbContextOptions<CatalogDbContext> options) : DbCo
         modelBuilder.HasDefaultSchema("catalog");
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(CatalogDbContext).Assembly);
     }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.AddInterceptors(new OutboxInterceptor());
+    }
+
 }

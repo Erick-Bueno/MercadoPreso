@@ -1,5 +1,4 @@
 using Common.Application.Interfaces;
-using Common.Domain;
 
 namespace Modules.Catalog.Application.Products.RegisterProduct.cs;
 

@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
         <PackageReference Include="Microsoft.EntityFrameworkCore" />
-        <PackageReference Include="HotChocolate.AspNetCore" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational"/>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
 <PackageReference Include="HotChocolate.Data" />
   </ItemGroup>
   <ItemGroup>

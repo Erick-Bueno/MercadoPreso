@@ -1,6 +1,7 @@
 using Common.Domain;
 using Common.Domain.Extensions;
 using Modules.Catalog.Domain.Errors;
+using Modules.Catalog.Domain.Promotions.Events;
 
 namespace Modules.Catalog.Domain.Promotions;
 
@@ -57,12 +58,13 @@ public class Promotion : AggregateRoot<PromotionId>
     public Result<Unit> Deactivate() =>
     Result.Success
             .Ensure(_ => DateTime.UtcNow > Period.End, PromotionErrors.InvalidPromotion)
-            .Tap(_ => Active = false);
-
+            .Tap(_ => Active = false)
+            .Tap(_ => Raise(new DeactivatePromotionEvent(Id)));
+    
 
 
 }
-public record PromotionId
+public sealed record PromotionId
 {
     public Guid Value { get; private set; }
     private PromotionId(Guid value)

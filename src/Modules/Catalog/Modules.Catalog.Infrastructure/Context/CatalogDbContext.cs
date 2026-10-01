@@ -5,15 +5,10 @@ using Modules.Catalog.Domain.Promotions;
 
 namespace Modules.Catalog.Infrastructure.Context;
 
-public class CatalogDbContext : DbContext
+public class CatalogDbContext(DbContextOptions<CatalogDbContext> options) : DbContext(options)
 {
     public DbSet<Product> Products { get; set; }
     public DbSet<Promotion> Promotions { get; set; }
-
-    public CatalogDbContext(DbContextOptions<CatalogDbContext> options)
-        : base(options) { }
-
-    protected CatalogDbContext() { }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {

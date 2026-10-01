@@ -13,4 +13,5 @@ public sealed record PromotionErrors
     public static readonly DomainError InvalidTitle = new (HttpStatusCode.BadRequest, "Titulo de promoção inválido", ErrorType.Validation);
     public static readonly DomainError PromotionNotExists = new(HttpStatusCode.BadRequest, "Promoção não existe", ErrorType.Validation);
     public static readonly DomainError InvalidPromotion = new(HttpStatusCode.BadRequest, "Promoção inválida", ErrorType.Validation);
+    public static readonly DomainError IsDisabled = new(HttpStatusCode.BadRequest, "Promoção desativada", ErrorType.Validation);
 }

@@ -23,6 +23,11 @@ public class AddProductToPromotionCommandHandler(IPromotionRepository promotionR
         {
             return PromotionErrors.PromotionNotExists;
         }
+        if (!promotion.Active)
+        {
+            return PromotionErrors.IsDisabled;
+        }
+
         var productId = ProductId.Create(command.ProductId);
         var product = await _productRepository.GetProductById(productId);
         if (product is null)

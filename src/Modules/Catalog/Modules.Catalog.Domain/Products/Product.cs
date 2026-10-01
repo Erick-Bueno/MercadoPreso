@@ -39,7 +39,7 @@ public class Product : AggregateRoot<ProductId>
 }
 
 
-public record ProductId
+public sealed record ProductId
 {
     public Guid Value { get; private set; }
 

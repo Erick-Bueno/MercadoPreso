@@ -11,17 +11,29 @@ services:
       POSTGRES_DB: mercado_preso
     ports:
       - "5432:5432"
+    command: ["postgres", "-c", "wal_level=logical"]
     volumes:
       - database:/var/lib/postgresql/data
+    networks:
+      - backend
+  kafka:
+    image: apache/kafka:latest
+    ports:
+      - "9092:9092"
+    environment:
+      - name=value
   mercadopresoapi:
     image: erickbueno/mercadopreso-api:latest
     ports:
       - 5113:5113
     depends_on:
       - postgres
+    networks:
+      - backend
   
 volumes:
   database:
 
 networks:
+  backend:
   

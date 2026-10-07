@@ -19,6 +19,4 @@ public sealed record Period
         Result.Create((Start: start, End: end)) 
             .Ensure(properties => properties.End < properties.Start, PromotionErrors.EndDateCannotBeBeforeStartDate)
             .Map(properties => new Period(properties.Start, properties.End));
-
-
 }

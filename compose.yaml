@@ -16,12 +16,115 @@ services:
       - database:/var/lib/postgresql/data
     networks:
       - backend
-  kafka:
+  #Kraft: é o algoritimo raft que o kafka implementou para fazer o gerenciamento dos servicos kafka dentro de um cluster
+  #inicialmente quando rodamos o cluster não existe um kafka lider que gerencie tudo e ai entra o algoritimo
+  #cada broker comeca a rodar tendo um tempo aleatorio que e resetado sempre que um "sinal de vida" do lider chega, mas como
+  #no inicio nao existe um lider ainda o tempo zera.
+  # exemplo: broker1: 1s, broker2: 0.5s, broker3: 1.5s
+  #o broker2 vai ser o primeiro a zerar, assim q ele zerar oq acontece é o seu epoch (tipo um mandato) é aumentado de 0 pra 1
+  #ele vota nele mesmo, e manda pros outros kafkas: "mandato 1, vota em mim?"
+  #cada kafka so pode votar uma vez por mandato entao oq eles fazem é 
+  #"ja votei em algum no mandato 1? não"
+  #o historico dele esta pelo menos tao atualizado quanto o meu? sim (todos estao vazios) 
+  #entao voto nele
+  #assim o broker com maioria de votos dentre o total vira o lider 
+  #com isso o lider comeca a mandar sinal de vida para os outros e cada vez q os outros recebem eles resetam o cronometro deles
+  #assim nunca chega a 0 e ninguem mais se candidata
+  #caso nenhum alcance a maioria dos votos os cronometos sao sorteados novamente 
+  
+  kafka1:
     image: apache/kafka:latest
-    ports:
-      - "9092:9092"
+    container_name: kafka1
     environment:
-      - name=value
+      - KAFKA_NODE_ID=1 #identificação do servico / broker kafka
+      - KAFKA_PROCESS_ROLES=broker,controller #esse servico kafka faz o papel de broker (receber eventos, enviar eventos etc...) e de controller
+      #basicamente todos os servicos kafka do cluster fazem papel de controller pois no momento que 1 cair outro assume o papel
+      - KAFKA_LISTENERS=SERVICES://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093 #porta onde os servicos vao se conectar e porta de comunicação entre os kafkas que fazem
+      #papel de controller
+      - KAFKA_ADVERTISED_LISTENERS=SERVICES://kafka1:9092 #endereço que o kafka retorna pros servicos que se conectam
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER #informa que o listner com CONTROLLER é o listner dos controllers
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=SERVICES:PLAINTEXT,CONTROLLER:PLAINTEXT #ambos plaintext ou seja sem criptografias, pra dev ta ok
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka1:9093,2@kafka2:9093,3@kafka3:9093 #lista de eleitores kafka_node_id@service:controllerPort
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=3 #kafka guarda em um topic interno __consumer_offsets, 
+      #"ate onde cada consumidor ja leu", isso diz quantas copias desse topic existem: 3 uma em cada
+      #broker
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=3 #Mesma ideia, para o tópico interno __transaction_state, que guarda o estado de transações
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=2 #ISR = In-Sync Replicas, réplicas que estão em dia com o líder. 
+      #Isso diz: para gravar no log de transações, pelo menos 2 cópias precisam estar sincronizadas. Se só 1 estiver viva, ele recusa a gravação em vez de arriscar perder dados.
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3 #Quando um tópico é criado automaticamente (ou sem você informar), ele nasce com 3 cópias.
+      - KAFKA_NUM_PARTITIONS=3 #numero de particoes
+      - KAFKA_MIN_INSYNC_REPLICAS=2 
+      - KAFKA_LOG_DIRS=/var/lib/kafka/data
+      - CLUSTER_ID=MkU3OEVBNTcwNTJENDM2Qk
+    networks:
+      - kafka-cluster
+    volumes:
+      - kafka1-data:/var/lib/kafka/data
+
+  kafka2:
+    image: apache/kafka:latest
+    container_name: kafka2
+    environment:
+      - KAFKA_NODE_ID=2
+      - KAFKA_PROCESS_ROLES=broker,controller 
+      - KAFKA_LISTENERS=SERVICES://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093 
+      - KAFKA_ADVERTISED_LISTENERS=SERVICES://kafka2:9092
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=SERVICES:PLAINTEXT,CONTROLLER:PLAINTEXT 
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka1:9093,2@kafka2:9093,3@kafka3:9093 
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=3
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=3 
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=2 
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3 
+      - KAFKA_NUM_PARTITIONS=3
+      - KAFKA_MIN_INSYNC_REPLICAS=2 
+      - KAFKA_LOG_DIRS=/var/lib/kafka/data
+      - CLUSTER_ID=MkU3OEVBNTcwNTJENDM2Qk
+    networks:
+      - kafka-cluster
+    volumes:
+      - kafka2-data:/var/lib/kafka/data
+
+  kafka3: 
+    image: apache/kafka:latest
+    container_name: kafka3
+    environment:
+      - KAFKA_NODE_ID=3 
+      - KAFKA_PROCESS_ROLES=broker,controller 
+      - KAFKA_LISTENERS=SERVICES://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093 
+      - KAFKA_ADVERTISED_LISTENERS=SERVICES://kafka3:9092 
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER 
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=SERVICES:PLAINTEXT,CONTROLLER:PLAINTEXT 
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka1:9093,2@kafka2:9093,3@kafka3:9093 
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=3  
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=3
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=2 
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3 
+      - KAFKA_NUM_PARTITIONS=3 
+      - KAFKA_MIN_INSYNC_REPLICAS=2 
+      - KAFKA_LOG_DIRS=/var/lib/kafka/data
+      - CLUSTER_ID=MkU3OEVBNTcwNTJENDM2Qk
+    networks:
+      - kafka-cluster
+    volumes:
+      - kafka3-data:/var/lib/kafka/data   
+
+  
+  kafka-ui:
+    image: ghcr.io/kafbat/kafka-ui:latest
+    container_name: kafkaui
+    ports:
+      - 8080:8080
+    environment:
+      - DYNAMIC_CONFIG_ENABLED='true'
+      - SWAGGER_UI_ENABLED='true'
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
+    networks:
+      - kafka-cluster
+
   mercadopresoapi:
     image: erickbueno/mercadopreso-api:latest
     ports:
@@ -30,10 +133,36 @@ services:
       - postgres
     networks:
       - backend
+
+  
+  debezium:
+    image: quay.io/debezium/connect
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
+      - kafka-ui
+      - postgres
+    ports:
+      - 8083:8083
+    networks:
+      - kafka-cluster
+      - backend
+    environment:
+      - BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9092,kafka3:9092
+      - GROUP_ID=connect-cluster
+      - CONFIG_STORAGE_TOPIC=connect_configs
+      - OFFSET_STORAGE_TOPIC=connect_offsets
+      - STATUS_STORAGE_TOPIC=my_source_connect_statuses
+
   
 volumes:
   database:
+  kafka1-data:
+  kafka2-data:
+  kafka3-data:
 
 networks:
   backend:
+  kafka-cluster:
   

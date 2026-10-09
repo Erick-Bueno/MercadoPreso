@@ -2,7 +2,7 @@
 
 services:
   postgres:
-    image: postgres
+    image: postgres:latest
     restart: unless-stopped
     container_name: mercado-preso-database
     environment:
@@ -11,11 +11,16 @@ services:
       POSTGRES_DB: mercado_preso
     ports:
       - "5432:5432"
-    command: ["postgres", "-c", "wal_level=logical"]
+    command: [ "postgres", "-c", "wal_level=logical" ]
     volumes:
-      - database:/var/lib/postgresql/data
+      - database:/var/lib/postgresql/18/docker
     networks:
       - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d mercado_preso"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
   #Kraft: é o algoritimo raft que o kafka implementou para fazer o gerenciamento dos servicos kafka dentro de um cluster
   #inicialmente quando rodamos o cluster não existe um kafka lider que gerencie tudo e ai entra o algoritimo
   #cada broker comeca a rodar tendo um tempo aleatorio que e resetado sempre que um "sinal de vida" do lider chega, mas como
@@ -31,7 +36,7 @@ services:
   #com isso o lider comeca a mandar sinal de vida para os outros e cada vez q os outros recebem eles resetam o cronometro deles
   #assim nunca chega a 0 e ninguem mais se candidata
   #caso nenhum alcance a maioria dos votos os cronometos sao sorteados novamente 
-  
+
   kafka1:
     image: apache/kafka:latest
     container_name: kafka1
@@ -53,9 +58,10 @@ services:
       #Isso diz: para gravar no log de transações, pelo menos 2 cópias precisam estar sincronizadas. Se só 1 estiver viva, ele recusa a gravação em vez de arriscar perder dados.
       - KAFKA_DEFAULT_REPLICATION_FACTOR=3 #Quando um tópico é criado automaticamente (ou sem você informar), ele nasce com 3 cópias.
       - KAFKA_NUM_PARTITIONS=3 #numero de particoes
-      - KAFKA_MIN_INSYNC_REPLICAS=2 
+      - KAFKA_MIN_INSYNC_REPLICAS=2
       - KAFKA_LOG_DIRS=/var/lib/kafka/data
       - CLUSTER_ID=MkU3OEVBNTcwNTJENDM2Qk
+      - KAFKA_INTER_BROKER_LISTENER_NAME=SERVICES #Nomes Personalizados devem ser setados aqui
     networks:
       - kafka-cluster
     volumes:
@@ -66,58 +72,69 @@ services:
     container_name: kafka2
     environment:
       - KAFKA_NODE_ID=2
-      - KAFKA_PROCESS_ROLES=broker,controller 
-      - KAFKA_LISTENERS=SERVICES://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093 
+      - KAFKA_PROCESS_ROLES=broker,controller
+      - KAFKA_LISTENERS=SERVICES://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
       - KAFKA_ADVERTISED_LISTENERS=SERVICES://kafka2:9092
       - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
-      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=SERVICES:PLAINTEXT,CONTROLLER:PLAINTEXT 
-      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka1:9093,2@kafka2:9093,3@kafka3:9093 
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=SERVICES:PLAINTEXT,CONTROLLER:PLAINTEXT
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka1:9093,2@kafka2:9093,3@kafka3:9093
       - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=3
-      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=3 
-      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=2 
-      - KAFKA_DEFAULT_REPLICATION_FACTOR=3 
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=3
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
       - KAFKA_NUM_PARTITIONS=3
-      - KAFKA_MIN_INSYNC_REPLICAS=2 
+      - KAFKA_MIN_INSYNC_REPLICAS=2
       - KAFKA_LOG_DIRS=/var/lib/kafka/data
       - CLUSTER_ID=MkU3OEVBNTcwNTJENDM2Qk
+      - KAFKA_INTER_BROKER_LISTENER_NAME=SERVICES 
     networks:
       - kafka-cluster
     volumes:
       - kafka2-data:/var/lib/kafka/data
 
-  kafka3: 
+  kafka3:
     image: apache/kafka:latest
     container_name: kafka3
     environment:
-      - KAFKA_NODE_ID=3 
-      - KAFKA_PROCESS_ROLES=broker,controller 
-      - KAFKA_LISTENERS=SERVICES://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093 
-      - KAFKA_ADVERTISED_LISTENERS=SERVICES://kafka3:9092 
-      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER 
-      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=SERVICES:PLAINTEXT,CONTROLLER:PLAINTEXT 
-      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka1:9093,2@kafka2:9093,3@kafka3:9093 
-      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=3  
+      - KAFKA_NODE_ID=3
+      - KAFKA_PROCESS_ROLES=broker,controller
+      - KAFKA_LISTENERS=SERVICES://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      - KAFKA_ADVERTISED_LISTENERS=SERVICES://kafka3:9092
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=SERVICES:PLAINTEXT,CONTROLLER:PLAINTEXT
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka1:9093,2@kafka2:9093,3@kafka3:9093
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=3
       - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=3
-      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=2 
-      - KAFKA_DEFAULT_REPLICATION_FACTOR=3 
-      - KAFKA_NUM_PARTITIONS=3 
-      - KAFKA_MIN_INSYNC_REPLICAS=2 
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_NUM_PARTITIONS=3
+      - KAFKA_MIN_INSYNC_REPLICAS=2
       - KAFKA_LOG_DIRS=/var/lib/kafka/data
       - CLUSTER_ID=MkU3OEVBNTcwNTJENDM2Qk
+      - KAFKA_INTER_BROKER_LISTENER_NAME=SERVICES 
     networks:
       - kafka-cluster
     volumes:
-      - kafka3-data:/var/lib/kafka/data   
+      - kafka3-data:/var/lib/kafka/data
 
-  
+  migrator:
+    build:
+      context: .
+      dockerfile: src/MercadoPreso.Api/Dockerfile
+      target: migrator
+    command: [ "--connection", "User ID=postgres;Password=root;Host=postgres;Port=5432;Database=mercado_preso;" ]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   kafka-ui:
     image: ghcr.io/kafbat/kafka-ui:latest
     container_name: kafkaui
     ports:
       - 8080:8080
     environment:
-      - DYNAMIC_CONFIG_ENABLED='true'
-      - SWAGGER_UI_ENABLED='true'
+      - DYNAMIC_CONFIG_ENABLED=true
+      - SWAGGER_UI_ENABLED=true
     depends_on:
       - kafka1
       - kafka2
@@ -134,7 +151,6 @@ services:
     networks:
       - backend
 
-  
   debezium:
     image: quay.io/debezium/connect
     depends_on:
@@ -155,7 +171,6 @@ services:
       - OFFSET_STORAGE_TOPIC=connect_offsets
       - STATUS_STORAGE_TOPIC=my_source_connect_statuses
 
-  
 volumes:
   database:
   kafka1-data:
@@ -165,4 +180,3 @@ volumes:
 networks:
   backend:
   kafka-cluster:
-  

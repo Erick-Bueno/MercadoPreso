@@ -18,7 +18,7 @@ public class AddProductToPromotionCommandHandler(IPromotionRepository promotionR
     public async Task<Result<AddProductToPromotionResponse>> Handle(AddProductToPromotionCommand command, CancellationToken cancellationToken)
     {
         var promotionId = PromotionId.Create(command.PromotionId);
-        var promotion = await _promotionRepository.GetPromotionById(promotionId);
+        var promotion = await _promotionRepository.GetPromotionById(promotionId, cancellationToken);
         if (promotion is null)
         {
             return PromotionErrors.PromotionNotExists;
@@ -29,7 +29,7 @@ public class AddProductToPromotionCommandHandler(IPromotionRepository promotionR
         }
 
         var productId = ProductId.Create(command.ProductId);
-        var product = await _productRepository.GetProductById(productId);
+        var product = await _productRepository.GetProductById(productId, cancellationToken);
         if (product is null)
         {
             return ProductErrors.ProductNotExists;

@@ -6,12 +6,12 @@ using Modules.Catalog.Application.Products.RemovePromotionFromProduct;
 
 namespace Modules.Catalog.Endpoints.Products;
 
-public class RemovePromotionFromProduct(Commands.ICommandHandler<RemovePromotionFromProductCommand, Unit> handler)
+public class RemovePromotionFromProductEndpoint(Commands.ICommandHandler<RemovePromotionFromProductCommand, Unit> handler)
     : Endpoint<RemovePromotionFromProductCommand, Unit>
 {
     public override void Configure()
     {
-        Post("promotions/{PromotionId:guid}/products/{ProductId:guid}");
+        Delete("promotions/{PromotionId:guid}/products/{ProductId:guid}");
         Group<CatalogGroup>();
     }
 

@@ -1,3 +1,4 @@
 namespace Common.Application.Interfaces;
-
-public interface ICommand<TResponse>;
+#pragma warning disable CA1040
+public interface ICommand<TResponse>{}
+#pragma warning restore CA1040

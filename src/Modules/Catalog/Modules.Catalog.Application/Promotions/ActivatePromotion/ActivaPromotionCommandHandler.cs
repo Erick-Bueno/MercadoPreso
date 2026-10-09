@@ -16,7 +16,7 @@ public class ActivaPromotionCommandHandler(IPromotionRepository promotionReposit
     public async Task<Result<Unit>> Handle(ActivatePromotionCommand command, CancellationToken cancellationToken)
     {
         var promotionId = PromotionId.Create(command.PromotionId);
-        var promotion = await _promotionRepository.GetPromotionById(promotionId);
+        var promotion = await _promotionRepository.GetPromotionById(promotionId, cancellationToken);
         if (promotion is null)
         {
             return PromotionErrors.PromotionNotExists;

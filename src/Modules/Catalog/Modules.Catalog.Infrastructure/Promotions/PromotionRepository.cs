@@ -9,6 +9,12 @@ public class PromotionRepository(CatalogDbContext dbContext) : IPromotionReposit
 {
     private readonly CatalogDbContext _dbContext = dbContext;
 
-    public async Task<Promotion?> GetPromotionById(PromotionId promotionId) =>
-        await _dbContext.Promotions.FirstOrDefaultAsync(promotion => promotion.Id == promotionId);
+    public async Task<Promotion?> GetPromotionById(
+        PromotionId promotionId,
+        CancellationToken cancellationToken
+    ) =>
+        await _dbContext.Promotions.FirstOrDefaultAsync(
+            promotion => promotion.Id == promotionId,
+            cancellationToken
+        );
 }

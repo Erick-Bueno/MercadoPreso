@@ -10,7 +10,8 @@ public class ActivatePromotionEndpoint(Commands.ICommandHandler<ActivatePromotio
 {
     public override void Configure()
     {
-        Patch("catalog/promotion/{id:guid}/activate");
+        Patch("promotion/{PromotionId:guid}/activate");
+        Group<CatalogGroup>();
     }
 
     public override async Task HandleAsync(

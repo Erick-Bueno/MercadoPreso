@@ -5,5 +5,5 @@ namespace Modules.Catalog.Application.Promotions.Interfaces;
 
 public interface IPromotionRepository
 {
-    public Task<Promotion?> GetPromotionById(PromotionId promotionId);
+    public Task<Promotion?> GetPromotionById(PromotionId promotionId, CancellationToken cancellationToken);
 }

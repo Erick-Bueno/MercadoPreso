@@ -4,5 +4,5 @@ namespace Modules.Catalog.Application.Products.Interfaces;
 
 public interface IProductRepository
 {
-    public Task<Product> GetProductById(ProductId id);
+    public Task<Product?> GetProductById(ProductId id, CancellationToken cancellationToken);
 }

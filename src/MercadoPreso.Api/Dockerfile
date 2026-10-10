@@ -18,12 +18,13 @@ RUN dotnet build "src/MercadoPreso.Api/MercadoPreso.Api.csproj" -c $configuratio
 FROM build As migrations
 RUN dotnet tool install --global dotnet-ef
 ENV PATH="$PATH:/root/.dotnet/tools"
+ENV ASPNETCORE_ENVIRONMENT=Development
 RUN dotnet ef migrations bundle --verbose \
---project src/Modules/Catalog/Modules.Catalog.Infrastructure \
---startup-project src/MercadoPreso.Api \
---context CatalogDbContext \
---self-contained -r linux-x64 \
---output artifacts/migrations/efbundle-catalog
+    --project src/Modules/Catalog/Modules.Catalog.Infrastructure \
+    --startup-project src/MercadoPreso.Api \
+    --context CatalogDbContext \
+    --self-contained -r linux-x64 \
+    --output artifacts/migrations/efbundle-catalog
 
 FROM mcr.microsoft.com/dotnet/runtime-deps:10.0 AS migrator
 COPY --from=migrations /src/artifacts/migrations/efbundle-catalog /migrations/efbundle-catalog

@@ -1,0 +1,13 @@
+{
+  "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+  "database.hostname": "postgres",
+  "database.port": "5432",
+  "database.user": "postgres",
+  "database.password": "root",
+  "database.dbname": "mercado_preso",
+  "topic.prefix": "mercadopreso",
+  "table.include.list": "common\\.Outbox",
+  "plugin.name": "pgoutput",
+  "slot.name": "debezium_mercadopreso",
+  "publication.autocreate.mode": "filtered"
+}

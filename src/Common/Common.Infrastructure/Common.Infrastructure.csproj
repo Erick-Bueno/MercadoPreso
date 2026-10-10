@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational"/>
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
-<PackageReference Include="HotChocolate.Data" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" />
+    <PackageReference Include="HotChocolate.Data" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common.Application\Common.Application.csproj" />

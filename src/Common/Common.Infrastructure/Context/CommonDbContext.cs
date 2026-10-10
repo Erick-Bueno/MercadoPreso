@@ -1,3 +1,4 @@
+using Common.Infrastructure.Context.Converters;
 using Common.Infrastructure.TransactionOutbox;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,4 +13,9 @@ public class CommonDbContext(DbContextOptions options) : DbContext(options)
         modelBuilder.HasDefaultSchema("common");
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(CommonDbContext).Assembly);
     }
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.Properties<OutboxId>().HaveConversion<OutboxIdConverter>();
+    }
+
 }

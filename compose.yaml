@@ -16,6 +16,7 @@ services:
       - database:/var/lib/postgresql/18/docker
     networks:
       - backend
+      - migrations
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d mercado_preso"]
       interval: 5s
@@ -126,6 +127,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    networks:
+      - migrations
 
   kafka-ui:
     image: ghcr.io/kafbat/kafka-ui:latest
@@ -135,6 +138,10 @@ services:
     environment:
       - DYNAMIC_CONFIG_ENABLED=true
       - SWAGGER_UI_ENABLED=true
+      - KAFKA_CLUSTERS_0_NAME=mercado-preso
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka1:9092,kafka2:9092,kafka3:9092
+      - KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME=debezium
+      - KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS=http://debezium:8083
     depends_on:
       - kafka1
       - kafka2
@@ -180,3 +187,4 @@ volumes:
 networks:
   backend:
   kafka-cluster:
+  migrations:

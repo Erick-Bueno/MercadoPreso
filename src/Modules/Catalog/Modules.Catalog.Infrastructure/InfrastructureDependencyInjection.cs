@@ -38,8 +38,6 @@ public static class InfrastructureDependencyInjection
                     .AsMatchingInterface()
                     .WithScopedLifetime()
             );
-            services.AddScoped<IPromotionRepository, PromotionRepository>();
-            services.AddScoped<IProductRepository, ProductRepository>();
             return services;
         }
     }

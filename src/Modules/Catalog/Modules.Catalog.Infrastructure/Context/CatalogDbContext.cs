@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Modules.Catalog.Domain.Products;
 using Modules.Catalog.Infrastructure.Context.Converters;
 using Modules.Catalog.Domain.Promotions;
+using Common.Infrastructure.Context.Configurations;
+using Common.Infrastructure.Context.Converters;
 using Common.Infrastructure.TransactionOutbox;
 
 namespace Modules.Catalog.Infrastructure.Context;
@@ -10,17 +12,20 @@ public class CatalogDbContext(DbContextOptions<CatalogDbContext> options) : DbCo
 {
     public DbSet<Product> Products { get; set; }
     public DbSet<Promotion> Promotions { get; set; }
+    public DbSet<Outbox> Outbox { get; set; }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.Properties<ProductId>().HaveConversion<ProductIdConverter>();
         configurationBuilder.Properties<PromotionId>().HaveConversion<PromotionIdConverter>();
+        configurationBuilder.Properties<OutboxId>().HaveConversion<OutboxIdConverter>();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("catalog");
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(CatalogDbContext).Assembly);
+        modelBuilder.ApplyConfiguration(new OutboxConfiguration());
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

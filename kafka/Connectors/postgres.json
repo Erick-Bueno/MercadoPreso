@@ -6,7 +6,7 @@
   "database.password": "root",
   "database.dbname": "mercado_preso",
   "topic.prefix": "mercadopreso",
-  "table.include.list": "common\\.Outbox",
+  "table.include.list": "catalog\\.Outbox",
   "plugin.name": "pgoutput",
   "slot.name": "debezium_mercadopreso",
   "publication.autocreate.mode": "filtered"

@@ -13,8 +13,8 @@ public sealed class Result<T>
 {
     private readonly T? _value;
     private readonly DomainError? _error;
-    public bool IsSuccess => Error is null;
-    public bool IsFailure => Error is not null;
+    public bool IsSuccess => _error is null;
+    public bool IsFailure => _error is not null;
 
     public Result(T value)
     {

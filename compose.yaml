@@ -153,6 +153,8 @@ services:
     image: erickbueno/mercadopreso-api:latest
     ports:
       - 5113:5113
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
       - postgres
     networks:

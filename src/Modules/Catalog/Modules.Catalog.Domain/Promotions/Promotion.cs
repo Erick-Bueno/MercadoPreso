@@ -57,7 +57,6 @@ public class Promotion : AggregateRoot<PromotionId>
 
     public Result<Unit> Deactivate() =>
     Result.Success
-            .Ensure(_ => DateTime.UtcNow > Period.End, PromotionErrors.InvalidPromotion)
             .Tap(_ => Active = false)
             .Tap(_ => Raise(new DeactivatePromotionEvent(Id)));
     

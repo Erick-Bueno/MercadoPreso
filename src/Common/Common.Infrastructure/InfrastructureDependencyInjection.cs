@@ -1,4 +1,5 @@
 using Common.Infrastructure.Context;
+using Common.Infrastructure.Messaging.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +17,9 @@ public static class InfrastructureDependencyInjection
                o => o.MigrationsHistoryTable("__EFMigrationsHistory", "common"))
            );
 
-           return services;
+            services.AddOptions<ConsumerOptions>(ConsumerOptions.SectionName)
+            .Bind(configuration.GetSection(ConsumerOptions.Catalog));
+            return services;
         }
     }
 }

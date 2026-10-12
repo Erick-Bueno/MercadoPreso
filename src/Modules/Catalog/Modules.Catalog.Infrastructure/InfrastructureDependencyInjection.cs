@@ -1,15 +1,9 @@
 using Common.Application.Interfaces;
-using Common.Infrastructure;
-using HotChocolate.Execution.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Modules.Catalog.Application;
-using Modules.Catalog.Application.Products.Interfaces;
-using Modules.Catalog.Application.Promotions.Interfaces;
 using Modules.Catalog.Infrastructure.Context;
-using Modules.Catalog.Infrastructure.Products;
-using Modules.Catalog.Infrastructure.Promotions;
+
 
 namespace Modules.Catalog.Infrastructure;
 

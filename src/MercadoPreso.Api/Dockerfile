@@ -28,8 +28,7 @@ RUN dotnet ef migrations bundle --verbose \
 
 FROM mcr.microsoft.com/dotnet/runtime-deps:10.0 AS migrator
 COPY --from=migrations /src/artifacts/migrations/efbundle-catalog /migrations/efbundle-catalog
-COPY --from=migrations /src/artifacts/migrations/efbundle-common /migrations/efbundle-common
-ENTRYPOINT ["/bin/sh", "-c", "/migrations/efbundle-common \"$@\" && /migrations/efbundle-catalog \"$@\"", "--"]
+ENTRYPOINT ["/bin/sh", "-c", "/migrations/efbundle-catalog \"$@\"", "--"]
 
 FROM build AS publish
 ARG configuration=Release

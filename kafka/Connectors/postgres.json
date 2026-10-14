@@ -10,12 +10,17 @@
   "plugin.name": "pgoutput",
   "slot.name": "debezium_mercadopreso",
   "publication.autocreate.mode": "filtered",
-  "table.field.event.key": 
 
   "tombstones.on.delete": false,
 
   "transforms": "outbox",
   "transforms.outbox.type": "io.debezium.transforms.outbox.EventRouter",
-  "table.field.event.id": "Id"
+  "transforms.outbox.table.field.event.id": "Id",
+  "transforms.outbox.table.field.event.key": "AggregateId",
+  "transforms.outbox.table.field.event.payload": "Payload",
+  "transforms.outbox.route.by.field": "AggregateType",
+  "transforms.outbox.table.field.event.type": "Type",
 
+  "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+  "value.converter.schemas.enable": false
 }

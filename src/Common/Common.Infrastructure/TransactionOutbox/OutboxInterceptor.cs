@@ -8,7 +8,11 @@ namespace Common.Infrastructure.TransactionOutbox;
 // antes da operação de persistência das alterações no banco.
 public class OutboxInterceptor : SaveChangesInterceptor
 {
-    public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
+    public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
+        DbContextEventData eventData,
+        InterceptionResult<int> result,
+        CancellationToken cancellationToken = default
+    )
     {
         // Obtém o DbContext responsável pelo SaveChangesAsync que está sendo executado.
         var context = eventData.Context;
@@ -17,12 +21,11 @@ public class OutboxInterceptor : SaveChangesInterceptor
         {
             return base.SavingChangesAsync(eventData, result, cancellationToken);
         }
-        //obter todas as entidades registradas no dbset do context especifico e filtrar pelo numero eventos 
-        var entities = context.ChangeTracker
-         .Entries<IEvent>()
-         .Where(entity => entity.Entity.GetDomainEvents().Count != 0)
-         .ToList();
-
+        //obter todas as entidades registradas no dbset do context especifico e filtrar pelo numero eventos
+        var entities = context
+            .ChangeTracker.Entries<IEvent>()
+            .Where(entity => entity.Entity.GetDomainEvents().Count != 0)
+            .ToList();
 
         // Para cada entidade com Domain Events:
         // 1. copia os eventos para memória;
@@ -33,13 +36,19 @@ public class OutboxInterceptor : SaveChangesInterceptor
             var events = entity.Entity.GetDomainEvents().ToArray();
             entity.Entity.ClearEvents();
             return events.Select(domainEvent =>
-
-                Outbox.Create(domainEvent.GetType().FullName!, JsonSerializer.Serialize(domainEvent, domainEvent.GetType()))
-                );
+            {
+                var aggregateId = ((IEntity)entity.Entity).GetId();
+                var entityType = entity.Metadata.ClrType.Name;
+                return Outbox.Create(
+                    domainEvent.GetType().FullName!,
+                    JsonSerializer.Serialize(domainEvent, domainEvent.GetType()),
+                    $"{entityType}:{aggregateId}",
+                    entityType
+                );  
+            });
         });
 
         context.Set<Outbox>().AddRange(messages);
         return base.SavingChangesAsync(eventData, result, cancellationToken);
-
     }
 }

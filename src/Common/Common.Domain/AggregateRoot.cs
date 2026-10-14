@@ -1,5 +1,5 @@
 namespace Common.Domain;
 
-public class AggregateRoot<TId>(TId id) : Entity<TId>(id)
+public class AggregateRoot<TId>(TId id) : Entity<TId>(id) where TId : notnull
 {
 }

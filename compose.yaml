@@ -151,6 +151,7 @@ services:
 
   mercadopresoapi:
     image: erickbueno/mercadopreso-api:latest
+    pull_policy: always
     ports:
       - 5113:5113
     environment:

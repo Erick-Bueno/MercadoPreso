@@ -1,7 +1,4 @@
-using System.Reflection.Metadata;
-using Common.Domain;
-
-namespace Common.Infrastructure.TransactionOutbox;
+namespace Common.Domain;
 
 public sealed class Outbox : Entity<OutboxId>
 {

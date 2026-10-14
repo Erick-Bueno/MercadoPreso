@@ -1,8 +1,8 @@
 using System.Text.Json;
 using Common.Domain;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-
-namespace Common.Infrastructure.TransactionOutbox;
+using TransactionOutbox = Common.Domain.Outbox;
+namespace Common.Infrastructure.Outbox;
 
 // Interceptor executado durante o SaveChanges/SaveChangesAsync,
 // antes da operação de persistência das alterações no banco.
@@ -39,7 +39,7 @@ public class OutboxInterceptor : SaveChangesInterceptor
             {
                 var aggregateId = ((IEntity)entity.Entity).GetId();
                 var entityType = entity.Metadata.ClrType.Name;
-                return Outbox.Create(
+                return TransactionOutbox.Create(
                     domainEvent.GetType().FullName!,
                     JsonSerializer.Serialize(domainEvent, domainEvent.GetType()),
                     $"{entityType}:{aggregateId}",
@@ -48,7 +48,7 @@ public class OutboxInterceptor : SaveChangesInterceptor
             });
         });
 
-        context.Set<Outbox>().AddRange(messages);
+        context.Set<TransactionOutbox>().AddRange(messages);
         return base.SavingChangesAsync(eventData, result, cancellationToken);
     }
 }

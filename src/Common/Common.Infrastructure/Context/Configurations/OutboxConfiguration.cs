@@ -1,12 +1,11 @@
-using Common.Infrastructure.TransactionOutbox;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
+using TransactionOutbox = Common.Domain.Outbox;
 namespace Common.Infrastructure.Context.Configurations;
 
-public class OutboxConfiguration : IEntityTypeConfiguration<Outbox>
+public class OutboxConfiguration : IEntityTypeConfiguration<TransactionOutbox>
 {
-    public void Configure(EntityTypeBuilder<Outbox> builder)
+    public void Configure(EntityTypeBuilder<TransactionOutbox> builder)
     {
         builder.HasKey(o => o.Id);
 

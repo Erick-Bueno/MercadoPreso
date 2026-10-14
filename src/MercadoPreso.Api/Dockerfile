@@ -25,12 +25,6 @@ RUN dotnet ef migrations bundle --verbose \
     --context CatalogDbContext \
     --self-contained -r linux-x64 \
     --output artifacts/migrations/efbundle-catalog
-RUN dotnet ef migrations bundle --verbose \
-    --project src/Common/Common.Infrastructure \
-    --startup-project src/MercadoPreso.Api \
-    --context CommonDbContext \
-    --self-contained -r linux-x64 \
-    --output artifacts/migrations/efbundle-common
 
 FROM mcr.microsoft.com/dotnet/runtime-deps:10.0 AS migrator
 COPY --from=migrations /src/artifacts/migrations/efbundle-catalog /migrations/efbundle-catalog

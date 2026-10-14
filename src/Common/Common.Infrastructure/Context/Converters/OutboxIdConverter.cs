@@ -1,4 +1,4 @@
-using Common.Infrastructure.TransactionOutbox;
+using Common.Domain;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Common.Infrastructure.Context.Converters;

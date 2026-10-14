@@ -12,11 +12,6 @@ public static class InfrastructureDependencyInjection
     {
         public IServiceCollection AddCommonInfrastructure(IConfiguration configuration)
         {
-            services.AddDbContext<CommonDbContext>(
-               options => options.UseNpgsql(configuration.GetConnectionString("default"),
-               o => o.MigrationsHistoryTable("__EFMigrationsHistory", "common"))
-           );
-
             services.AddOptions<ConsumerOptions>(ConsumerOptions.SectionName)
             .Bind(configuration.GetSection(ConsumerOptions.Catalog));
             return services;

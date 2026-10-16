@@ -40,19 +40,19 @@ public class Promotion : AggregateRoot<PromotionId>
         Period period
     )
     => Result.Create((Title: title, Description: description, Discount: discount, Period: period))
-        .Ensure(_ => string.IsNullOrEmpty(title) || string.IsNullOrWhiteSpace(title), PromotionErrors.InvalidTitle)
+        .Ensure(_ => !string.IsNullOrEmpty(title) || !string.IsNullOrWhiteSpace(title), PromotionErrors.InvalidTitle)
         .Map(properties => new Promotion(
             properties.Title,
             properties.Description,
             properties.Discount,
             properties.Period,
             true,
-            PromotionId.Create(Guid.CreateVersion7())
+            PromotionId.New()
         ));
 
     public Result<Unit> Activate()
      => Result.Success
-            .Ensure(_ => DateTime.UtcNow > Period.End, PromotionErrors.InvalidPromotion)
+            .Ensure(_ => DateTime.UtcNow < Period.End, PromotionErrors.InvalidPromotion)
             .Tap(_ => Active = true);
 
     public Result<Unit> Deactivate() =>
@@ -63,12 +63,9 @@ public class Promotion : AggregateRoot<PromotionId>
 
 
 }
-public sealed record PromotionId
+
+public readonly record struct PromotionId(Guid Value)
 {
-    public Guid Value { get; private set; }
-    private PromotionId(Guid value)
-    {
-        Value = value;
-    }
-    public static PromotionId Create(Guid Value) => new(Value);
+    public static PromotionId New() => new(Guid.CreateVersion7()); 
 }
+

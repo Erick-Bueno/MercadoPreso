@@ -21,31 +21,26 @@ public class Product : AggregateRoot<ProductId>
     public static Result<Product> Create(string name, Price price) =>
      Result.Create((Name: name, Price: price))
              .Ensure(
-                properties => string.IsNullOrWhiteSpace(properties.Name),
+                properties => !string.IsNullOrWhiteSpace(properties.Name),
                 ProductErrors.ProductNameIsRequired)
-             .Map(product => new Product(ProductId.Create(Guid.CreateVersion7()), product.Name, product.Price));
+             .Map(product => new Product(ProductId.New(), product.Name, product.Price));
 
 
-    public Result<Unit> ActivatePromotion(PromotionId promotionId) =>
+    public Result<Unit> AssignPromotion(Promotion newPromotion) =>
         Result.Success
-        .Ensure(_ => PromotionId != null, ProductErrors.ProductAlreadyHasAnActivePromotion)
-        .Tap(_ => PromotionId = promotionId);
+        .Ensure(_ => PromotionId == null, ProductErrors.ProductAlreadyHasAnActivePromotion)
+        .Ensure(_ => newPromotion.Active, PromotionErrors.InvalidPromotion)
+        .Tap(_ => PromotionId = newPromotion.Id);
 
     public Result<Unit> RemovePromotion() => 
     Result.Success
-        .Ensure(_ => PromotionId == null, ProductErrors.ProductDoesNotHavePromotion)
+        .Ensure(_ => PromotionId != null, ProductErrors.ProductDoesNotHavePromotion)
         .Tap(_ => PromotionId = null);
 
 }
 
 
-public sealed record ProductId
+public readonly record struct ProductId(Guid Value)
 {
-    public Guid Value { get; private set; }
-
-    private ProductId(Guid value)
-    {
-        Value = value;
-    }
-    public static ProductId Create(Guid value) => new(value);
-};
+    public static ProductId New() => new(Guid.CreateVersion7());
+}

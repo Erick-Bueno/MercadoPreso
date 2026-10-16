@@ -32,7 +32,7 @@ public class PromotionDeactivatedConsumer : BackgroundService
             while (!stoppingToken.IsCancellationRequested)
             {
                 var result = consumer.Consume(stoppingToken);
-                
+                //logica + inbox
                 consumer.Commit(result);
             }
         }

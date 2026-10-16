@@ -19,8 +19,10 @@
   "transforms.outbox.table.field.event.key": "AggregateId",
   "transforms.outbox.table.field.event.payload": "Payload",
   "transforms.outbox.route.by.field": "AggregateType",
-  "transforms.outbox.table.field.event.type": "Type",
+  "transforms.outbox.table.fields.additional.placement": "Type:header:eventType",
 
   "value.converter": "org.apache.kafka.connect.json.JsonConverter",
-  "value.converter.schemas.enable": false
+  "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+  "value.converter.schemas.enable": false,
+  "transforms.outbox.table.expand.json.payload": true
 }

@@ -9,6 +9,8 @@ public class ProductRepository(CatalogDbContext dbContext) : IProductRepository
 {
     private readonly CatalogDbContext _dbContext = dbContext;
 
+    public void Create(Product product) => _dbContext.Products.Add(product);
+
     public async Task<Product?> GetProductById(ProductId id, CancellationToken cancellationToken) =>
         await _dbContext.Products.FirstOrDefaultAsync(
             product => product.Id == id,

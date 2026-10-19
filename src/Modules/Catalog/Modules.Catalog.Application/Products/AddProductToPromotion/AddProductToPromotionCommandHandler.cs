@@ -35,7 +35,7 @@ public class AddProductToPromotionCommandHandler(IPromotionRepository promotionR
             return ProductErrors.ProductNotExists;
         }
 
-        if (product.ActivatePromotion(promotionId) is { IsFailure: true } result)
+        if (product.AssignPromotion(promotion) is { IsFailure: true } result)
         {
             return result.Error;
         }

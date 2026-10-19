@@ -1,7 +1,6 @@
 using Common.Domain;
 using Common.Domain.Extensions;
 using Modules.Catalog.Domain.Errors;
-using Modules.Catalog.Domain.Promotions.Events;
 
 namespace Modules.Catalog.Domain.Promotions;
 
@@ -57,8 +56,7 @@ public class Promotion : AggregateRoot<PromotionId>
 
     public Result<Unit> Deactivate() =>
     Result.Success
-            .Tap(_ => Active = false)
-            .Tap(_ => Raise(new DeactivatePromotionEvent(Id)));
+            .Tap(_ => Active = false);
     
 
 
@@ -67,5 +65,6 @@ public class Promotion : AggregateRoot<PromotionId>
 public readonly record struct PromotionId(Guid Value)
 {
     public static PromotionId New() => new(Guid.CreateVersion7()); 
+    public static PromotionId Create(Guid value) => new(value);
 }
 

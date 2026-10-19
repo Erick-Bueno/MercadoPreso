@@ -1,3 +1,4 @@
+using Common.Domain;
 using Modules.Catalog.Domain.Products;
 
 namespace Modules.Catalog.Application.Products.Interfaces;
@@ -5,4 +6,5 @@ namespace Modules.Catalog.Application.Products.Interfaces;
 public interface IProductRepository
 {
     public Task<Product?> GetProductById(ProductId id, CancellationToken cancellationToken);
+    public void Create(Product product);
 }

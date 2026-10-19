@@ -31,11 +31,11 @@ public static class ResultExtensions
             return result;
         }
 
-        public Result<T> Bind(Func<T, Result<T>> func)
+        public Result<TOut> Bind<TOut>(Func<T, Result<TOut>> func)
         {
             if (result.IsFailure)
             {
-                return result;
+                return result.Error;
             }
             return func(result.Value);
         }

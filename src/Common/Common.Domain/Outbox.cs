@@ -24,14 +24,9 @@ public sealed class Outbox : Entity<OutboxId>
         new(aggregateId, type, payload, OutboxId.Create(Guid.CreateVersion7()), aggregateType);
 }
 
-public sealed record OutboxId
+
+public readonly record struct OutboxId(Guid Value)
 {
-    public Guid Value { get; private set; }
+        public static OutboxId Create(Guid value) => new(value);
 
-    private OutboxId(Guid value)
-    {
-        Value = value;
-    }
-
-    public static OutboxId Create(Guid value) => new(value);
 }

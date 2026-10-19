@@ -2,6 +2,7 @@ using Common.Domain;
 using Modules.Catalog.Domain.Promotions;
 using Modules.Catalog.Domain.Errors;
 using Common.Domain.Extensions;
+using Modules.Catalog.Domain.Products.Events;
 
 namespace Modules.Catalog.Domain.Products;
 
@@ -25,7 +26,6 @@ public class Product : AggregateRoot<ProductId>
                 ProductErrors.ProductNameIsRequired)
              .Map(product => new Product(ProductId.New(), product.Name, product.Price));
 
-
     public Result<Unit> AssignPromotion(Promotion newPromotion) =>
         Result.Success
         .Ensure(_ => PromotionId == null, ProductErrors.ProductAlreadyHasAnActivePromotion)
@@ -43,4 +43,5 @@ public class Product : AggregateRoot<ProductId>
 public readonly record struct ProductId(Guid Value)
 {
     public static ProductId New() => new(Guid.CreateVersion7());
+    public static ProductId Create(Guid value) => new(value);
 }

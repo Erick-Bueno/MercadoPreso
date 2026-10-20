@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TransactionOutbox = Common.Domain.Outbox;
+using TransactionOutbox = Common.Infrastructure.Outbox.Outbox;
 namespace Common.Infrastructure.Context.Configurations;
 
 public class OutboxConfiguration : IEntityTypeConfiguration<TransactionOutbox>

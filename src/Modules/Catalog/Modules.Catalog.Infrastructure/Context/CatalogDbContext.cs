@@ -5,7 +5,6 @@ using Modules.Catalog.Domain.Promotions;
 using Common.Infrastructure.Context.Configurations;
 using Common.Infrastructure.Context.Converters;
 using Common.Infrastructure.Outbox;
-using Common.Domain;
 
 namespace Modules.Catalog.Infrastructure.Context;
 

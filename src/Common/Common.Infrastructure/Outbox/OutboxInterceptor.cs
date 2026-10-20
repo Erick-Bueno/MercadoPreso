@@ -1,7 +1,8 @@
 using System.Text.Json;
 using Common.Domain;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using TransactionOutbox = Common.Domain.Outbox;
+using TransactionOutbox = Common.Infrastructure.Outbox.Outbox;
+
 namespace Common.Infrastructure.Outbox;
 
 // Interceptor executado durante o SaveChanges/SaveChangesAsync,
@@ -39,12 +40,12 @@ public class OutboxInterceptor : SaveChangesInterceptor
             {
                 var aggregateId = ((IEntity)entity.Entity).GetId();
                 var entityType = entity.Metadata.ClrType.Name;
-                return TransactionOutbox.Create(
-                    domainEvent.GetType().FullName!,
-                    JsonSerializer.Serialize(domainEvent, domainEvent.GetType()),
+                return new TransactionOutbox(
                     $"{entityType}:{aggregateId}",
-                    entityType
-                );  
+                    domainEvent.GetType().FullName!,
+                    entityType,
+                    JsonSerializer.Serialize(domainEvent, domainEvent.GetType())
+                );
             });
         });
 

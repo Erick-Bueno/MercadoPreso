@@ -3,7 +3,6 @@ using Modules.Catalog.Domain.Products;
 using Modules.Catalog.Infrastructure.Context.Converters;
 using Modules.Catalog.Domain.Promotions;
 using Common.Infrastructure.Context.Configurations;
-using Common.Infrastructure.Context.Converters;
 using Common.Infrastructure.Outbox;
 
 namespace Modules.Catalog.Infrastructure.Context;
@@ -18,7 +17,6 @@ public class CatalogDbContext(DbContextOptions<CatalogDbContext> options) : DbCo
     {
         configurationBuilder.Properties<ProductId>().HaveConversion<ProductIdConverter>();
         configurationBuilder.Properties<PromotionId>().HaveConversion<PromotionIdConverter>();
-        configurationBuilder.Properties<OutboxId>().HaveConversion<OutboxIdConverter>();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -26,10 +24,6 @@ public class CatalogDbContext(DbContextOptions<CatalogDbContext> options) : DbCo
         modelBuilder.HasDefaultSchema("catalog");
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(CatalogDbContext).Assembly);
         modelBuilder.ApplyConfiguration(new OutboxConfiguration());
-    }
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.AddInterceptors(new OutboxInterceptor());
     }
 
 }

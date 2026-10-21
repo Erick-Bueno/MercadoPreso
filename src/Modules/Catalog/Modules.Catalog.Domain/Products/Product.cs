@@ -24,7 +24,12 @@ public class Product : AggregateRoot<ProductId>
              .Ensure(
                 properties => !string.IsNullOrWhiteSpace(properties.Name),
                 ProductErrors.ProductNameIsRequired)
-             .Map(product => new Product(ProductId.New(), product.Name, product.Price));
+             .Map(product =>
+             {
+                 var newProduct = new Product(ProductId.New(), product.Name, product.Price);
+                 newProduct.Raise(new ProductCreatedDomainEvent(newProduct.Id));
+                 return newProduct;
+             });
 
     public Result<Unit> AssignPromotion(Promotion newPromotion) =>
         Result.Success
@@ -32,7 +37,7 @@ public class Product : AggregateRoot<ProductId>
         .Ensure(_ => newPromotion.Active, PromotionErrors.InvalidPromotion)
         .Tap(_ => PromotionId = newPromotion.Id);
 
-    public Result<Unit> RemovePromotion() => 
+    public Result<Unit> RemovePromotion() =>
     Result.Success
         .Ensure(_ => PromotionId != null, ProductErrors.ProductDoesNotHavePromotion)
         .Tap(_ => PromotionId = null);

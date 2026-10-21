@@ -1,4 +1,5 @@
 using Common.Application.Interfaces;
+using Common.Infrastructure.Outbox;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,11 +14,14 @@ public static class InfrastructureDependencyInjection
     {
         public IServiceCollection AddCatalogInfrastructure(IConfiguration configuration)
         {
-            services.AddDbContext<CatalogDbContext>(options =>
-                options.UseNpgsql(
-                    configuration.GetConnectionString("default"),
-                    o => o.MigrationsHistoryTable("__EFMigrationsHistory", "catalog")
-                )
+            services.AddScoped<OutboxInterceptor>();
+            services.AddDbContext<CatalogDbContext>((sp, options) =>
+                options
+                    .UseNpgsql(
+                        configuration.GetConnectionString("default"),
+                        o => o.MigrationsHistoryTable("__EFMigrationsHistory", "catalog")
+                    )
+                    .AddInterceptors(sp.GetRequiredService<OutboxInterceptor>())
             );
             services.AddKeyedScoped<IUnitOfWork, UnitOfWork>("catalog");
 
@@ -32,6 +36,8 @@ public static class InfrastructureDependencyInjection
                     .AsMatchingInterface()
                     .WithScopedLifetime()
             );
+
+            services.AddKeyedScoped<IOutboxWriter, OutboxWriter<CatalogDbContext>>("Catalog");
             return services;
         }
     }

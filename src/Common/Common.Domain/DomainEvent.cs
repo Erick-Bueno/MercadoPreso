@@ -1,3 +1,3 @@
 namespace Common.Domain;
 
-public record DomainEvent();
+public record DomainEvent() : IDomainEvent;

@@ -2,6 +2,7 @@ using Common.Infrastructure;
 using FastEndpoints;
 using MercadoPreso.Api;
 using Modules.Catalog.Application;
+using Modules.Catalog.Application.IntegrationEventHandlers;
 using Modules.Catalog.Endpoints;
 using Modules.Catalog.Infrastructure;
 
@@ -27,6 +28,11 @@ builder.Services.AddCatalogApplication();
 
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
+builder.Services.AddMediator(options =>
+{
+    options.ServiceLifetime = ServiceLifetime.Scoped;
+    options.Assemblies = [typeof(PublishProductCreatedIntegrationEventHandler)];
+});
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 var app = builder.Build();

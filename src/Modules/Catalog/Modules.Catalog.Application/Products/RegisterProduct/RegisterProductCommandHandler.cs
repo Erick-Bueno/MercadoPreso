@@ -24,7 +24,6 @@ public class RegisterProductCommandHandler(
             .Create(command.Price)
             .Bind(price => Product.Create(command.Name, price))
             .Tap(_productRepository.Create)
-            .Tap(product => product.Raise(new ProductCreatedEvent(product.Id)))
             .Tap(async _ => await _unitOfWork.SaveChanges(cancellationToken))
             .Map(product => new RegisterProductResponse(product.Id));
 }

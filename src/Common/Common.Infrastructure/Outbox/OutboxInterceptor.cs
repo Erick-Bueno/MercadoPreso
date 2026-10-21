@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Common.Domain;
+using Mediator;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using TransactionOutbox = Common.Infrastructure.Outbox.Outbox;
 
@@ -7,9 +8,9 @@ namespace Common.Infrastructure.Outbox;
 
 // Interceptor executado durante o SaveChanges/SaveChangesAsync,
 // antes da operação de persistência das alterações no banco.
-public class OutboxInterceptor : SaveChangesInterceptor
+public class OutboxInterceptor(IPublisher publisher) : SaveChangesInterceptor
 {
-    public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
+    public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(
         DbContextEventData eventData,
         InterceptionResult<int> result,
         CancellationToken cancellationToken = default
@@ -20,7 +21,7 @@ public class OutboxInterceptor : SaveChangesInterceptor
 
         if (context is null)
         {
-            return base.SavingChangesAsync(eventData, result, cancellationToken);
+            return await base.SavingChangesAsync(eventData, result, cancellationToken);
         }
         //obter todas as entidades registradas no dbset do context especifico e filtrar pelo numero eventos
         var entities = context
@@ -36,20 +37,14 @@ public class OutboxInterceptor : SaveChangesInterceptor
         {
             var events = entity.Entity.GetDomainEvents().ToArray();
             entity.Entity.ClearEvents();
-            return events.Select(domainEvent =>
-            {
-                var aggregateId = ((IEntity)entity.Entity).GetId();
-                var entityType = entity.Metadata.ClrType.Name;
-                return new TransactionOutbox(
-                    $"{entityType}:{aggregateId}",
-                    domainEvent.GetType().FullName!,
-                    entityType,
-                    JsonSerializer.Serialize(domainEvent, domainEvent.GetType())
-                );
-            });
-        });
+            return events;
+        }).ToList();
 
-        context.Set<TransactionOutbox>().AddRange(messages);
-        return base.SavingChangesAsync(eventData, result, cancellationToken);
+        foreach (var domainEvent in messages)
+        {
+            await publisher.Publish(domainEvent, cancellationToken);
+        }
+        return await base.SavingChangesAsync(eventData, result, cancellationToken);
+
     }
 }

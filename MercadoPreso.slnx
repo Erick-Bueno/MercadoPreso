@@ -7,6 +7,7 @@
     <Project Path="src/Common/Common.Domain/Common.Domain.csproj" />
     <Project Path="src/Common/Common.Endpoints/Common.Endpoints.csproj" />
     <Project Path="src/Common/Common.Infrastructure/Common.Infrastructure.csproj" />
+    <Project Path="src/Common/Common.IntegrationEvents/Common.IntegrationEvents.csproj" />
   </Folder>
   <Folder Name="/src/Modules/" />
   <Folder Name="/src/Modules/Catalog/">
@@ -14,6 +15,7 @@
     <Project Path="src/Modules/Catalog/Modules.Catalog.Domain/Modules.Catalog.Domain.csproj" />
     <Project Path="src/Modules/Catalog/Modules.Catalog.Infrastructure/Modules.Catalog.Infrastructure.csproj" />
     <Project Path="src/Modules/Catalog/Modules.Catalog.Endpoints/Modules.Catalog.Endpoints.csproj" />
+    <Project Path="src/Modules/Catalog/Modules.Catalog.IntegrationEvents/Modules.Catalog.IntegrationEvents.csproj" />
   </Folder>
   <Folder Name="/src/Modules/Stock/">
     <Project Path="src/Modules/Stock/Modules.Stock.Domain/Modules.Stock.Domain.csproj" />

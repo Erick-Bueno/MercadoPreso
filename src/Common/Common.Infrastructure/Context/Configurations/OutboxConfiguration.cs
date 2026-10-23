@@ -10,5 +10,6 @@ public class OutboxConfiguration : IEntityTypeConfiguration<TransactionOutbox>
         builder.HasKey(o => o.Id);
 
         builder.Property(o => o.Payload).HasColumnType("jsonb");
+        builder.Property(o => o.OcurredOnUtc).HasDefaultValueSql("NOW()");
     }
 }

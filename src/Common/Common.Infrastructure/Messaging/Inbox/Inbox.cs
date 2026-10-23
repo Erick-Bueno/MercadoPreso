@@ -1,6 +1,6 @@
-namespace Common.Infrastructure.Outbox;
+namespace Common.Infrastructure.Messaging.Inbox;
 
-public sealed class Outbox(string aggregateId, string aggregateType, string type, string payload)
+public sealed class Inbox(string aggregateId, string aggregateType, string type, string payload)
 {
     public Guid Id { get; } = Guid.CreateVersion7();
     public string AggregateId { get; } = aggregateId;

@@ -1,6 +1,5 @@
 using Common.Infrastructure.Messaging.Options;
 using Confluent.Kafka;
-using Microsoft.CodeAnalysis.Options;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 

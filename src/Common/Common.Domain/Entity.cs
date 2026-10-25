@@ -6,7 +6,7 @@ public class Entity<TId>(TId id) : IEvent, IEntity
     where TId : notnull
 {
     public TId Id { get; private set; } = id;
-    public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
     private readonly List<DomainEvent> _domainEvents = [];
 

@@ -1,9 +1,11 @@
-using Microsoft.EntityFrameworkCore;
-using Modules.Catalog.Domain.Products;
-using Modules.Catalog.Infrastructure.Context.Converters;
-using Modules.Catalog.Domain.Promotions;
+using Common.Domain;
+using Common.Infrastructure.Context;
 using Common.Infrastructure.Context.Configurations;
 using Common.Infrastructure.Outbox;
+using Microsoft.EntityFrameworkCore;
+using Modules.Catalog.Domain.Products;
+using Modules.Catalog.Domain.Promotions;
+using Modules.Catalog.Infrastructure.Context.Converters;
 
 namespace Modules.Catalog.Infrastructure.Context;
 
@@ -24,6 +26,7 @@ public class CatalogDbContext(DbContextOptions<CatalogDbContext> options) : DbCo
         modelBuilder.HasDefaultSchema("catalog");
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(CatalogDbContext).Assembly);
         modelBuilder.ApplyConfiguration(new OutboxConfiguration());
-    }
 
+        modelBuilder.ApplyAuditDates();
+    }
 }

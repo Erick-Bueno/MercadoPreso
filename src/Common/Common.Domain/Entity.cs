@@ -6,12 +6,10 @@ public class Entity<TId>(TId id) : IEvent, IEntity
     where TId : notnull
 {
     public TId Id { get; private set; } = id;
-    public DateTime CreatedAt { get; private set; }
-    public DateTime UpdatedAt { get; private set; }
+    public DateTime CreatedAt { get; init; }
+    public DateTime UpdatedAt { get; init; }
     private readonly List<DomainEvent> _domainEvents = [];
-
-    public void MarkAsUpdated() => UpdatedAt = DateTime.UtcNow;
-
+    
     public void Raise(DomainEvent domainEvent)
     {
         _domainEvents.Add(domainEvent);

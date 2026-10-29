@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Common.Domain.Errors;
 
 namespace Common.Domain;
@@ -13,6 +14,8 @@ public sealed class Result<T>
 {
     private readonly T? _value;
     private readonly DomainError? _error;
+    [MemberNotNullWhen(true, nameof(_value))]
+    [MemberNotNullWhen(false, nameof(_error))]
     public bool IsSuccess => _error is null;
     public bool IsFailure => _error is not null;
 
@@ -28,14 +31,14 @@ public sealed class Result<T>
 
     public T Value =>
         IsSuccess
-            ? _value!
+            ? _value
             : throw new InvalidOperationException(
                 "Não é possível acessar o valor de um resultado com falha."
             );
 
     public DomainError Error =>
         !IsSuccess
-            ? _error!
+            ? _error
             : throw new InvalidOperationException(
                 "Não é possível acessar o valor de um erro inexistente"
             );

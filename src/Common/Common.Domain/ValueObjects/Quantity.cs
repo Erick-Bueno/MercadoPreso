@@ -1,17 +1,18 @@
+using Common.Domain.Extensions;
+
 namespace Common.Domain.ValueObjects;
 
 public sealed record Quantity
 {
-    private readonly decimal Value { get; private set; }
+    public int Value { get; private set; }
 
-    private Quantity(decimal value)
+    private Quantity(int value)
     {
         Value = value;
     }
 
-    public static Result<Quantity> Create(decimal value)
-        => Result.Create((Quantity: value))
-            .
-
-    
+    public static Result<Quantity> Create(int value) =>
+        Result
+            .Success.Ensure(_ => value >= 0, Errors.DomainError.QuantityCannotBeNegative)
+            .Map(_ => new Quantity(value));
 }

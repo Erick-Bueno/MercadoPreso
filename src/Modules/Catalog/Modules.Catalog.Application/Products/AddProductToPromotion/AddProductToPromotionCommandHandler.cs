@@ -1,13 +1,14 @@
 using Common.Application.Interfaces;
 using Common.Domain;
 using Microsoft.Extensions.DependencyInjection;
+using Modules.Catalog.Application.Products.AddProductToPromotion.cs;
 using Modules.Catalog.Application.Products.Interfaces;
 using Modules.Catalog.Application.Promotions.Interfaces;
 using Modules.Catalog.Domain.Errors;
 using Modules.Catalog.Domain.Products;
 using Modules.Catalog.Domain.Promotions;
 
-namespace Modules.Catalog.Application.Products.AddProductToPromotion.cs;
+namespace Modules.Catalog.Application.Products.AddProductToPromotion;
 
 
 public class AddProductToPromotionCommandHandler(IPromotionRepository promotionRepository, IProductRepository productRepository, [FromKeyedServices("catalog")] IUnitOfWork unitOfWork) : ICommandHandler<AddProductToPromotionCommand, AddProductToPromotionResponse>

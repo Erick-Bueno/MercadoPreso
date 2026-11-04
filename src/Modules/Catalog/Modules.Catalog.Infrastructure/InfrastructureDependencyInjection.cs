@@ -1,4 +1,5 @@
 using Common.Application.Interfaces;
+using Common.Infrastructure.Messaging.Outbox;
 using Common.Infrastructure.Outbox;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

@@ -4,7 +4,7 @@ using Mediator;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using TransactionOutbox = Common.Infrastructure.Outbox.Outbox;
 
-namespace Common.Infrastructure.Outbox;
+namespace Common.Infrastructure.Messaging.Outbox;
 
 // Interceptor executado durante o SaveChanges/SaveChangesAsync,
 // antes da operação de persistência das alterações no banco.
@@ -25,7 +25,7 @@ public class OutboxInterceptor(IPublisher publisher) : SaveChangesInterceptor
         }
         //obter todas as entidades registradas no dbset do context especifico e filtrar pelo numero eventos
         var entities = context
-            .ChangeTracker.Entries<IEvent>()
+            .ChangeTracker.Entries<IHasDomainEvent>()
             .Where(entity => entity.Entity.GetDomainEvents().Count != 0)
             .ToList();
 

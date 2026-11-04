@@ -18,6 +18,7 @@
     <Project Path="src/Modules/Catalog/Modules.Catalog.IntegrationEvents/Modules.Catalog.IntegrationEvents.csproj" />
   </Folder>
   <Folder Name="/src/Modules/Sales/">
+    <Project Path="src/Modules/Sales/Modules.Sales.Application/Modules.Sales.Application.csproj" />
     <Project Path="src/Modules/Sales/Modules.Sales.Domain/Modules.Sales.Domain.csproj" />
     <Project Path="src/Modules/Sales/Modules.Sales.Infrastructure/Modules.Sales.Infrastructure.csproj" />
   </Folder>

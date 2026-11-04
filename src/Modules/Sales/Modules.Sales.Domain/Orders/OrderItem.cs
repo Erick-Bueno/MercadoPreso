@@ -2,7 +2,7 @@ using Common.Domain;
 using Common.Domain.Extensions;
 using Common.Domain.ValueObjects;
 
-namespace Modules.Sales.Domain.Quotes;
+namespace Modules.Sales.Domain.Orders;
 
 public sealed class OrderItem : Entity<OrderItemId>
 {

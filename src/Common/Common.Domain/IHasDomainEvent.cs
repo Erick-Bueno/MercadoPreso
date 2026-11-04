@@ -1,6 +1,6 @@
 namespace Common.Domain;
 
-public interface IEvent
+public interface IHasDomainEvent
 {
     public void Raise(DomainEvent domainEvent);
     public void ClearEvents();

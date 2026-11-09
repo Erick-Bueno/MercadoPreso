@@ -5,5 +5,5 @@ namespace Modules.Sales.Application.Orders.Interfaces;
 
 public interface IOrderRepository
 {
-    public void Save(Order order);
+    public Task Save(Order order, CancellationToken cancellationToken);
 }

@@ -1,11 +1,13 @@
 namespace Common.Domain;
 
 public class EventSourcedAggregateRoot<TId>(TId id) :
-Entity<TId>(id), 
+Entity<TId>(id),
 IHasEventSourced
 where TId : notnull
 {
     private readonly List<DomainEvent> _uncommitedEvents = [];
+
+    public int Version { get; set; } = -1;
 
     public IReadOnlyCollection<DomainEvent> GetUncommitedEvents() => _uncommitedEvents.AsReadOnly();
 
@@ -15,5 +17,11 @@ where TId : notnull
         Apply(@event);
 
     }
-    protected virtual void Apply(DomainEvent @event){}
+
+    public void LoadFromHistory(DomainEvent @event, int eventNumber)
+    {
+        Apply(@event);
+        Version = eventNumber;
+    }
+    protected virtual void Apply(DomainEvent @event) { }
 }

@@ -23,5 +23,11 @@ where TId : notnull
         Apply(@event);
         Version = eventNumber;
     }
+
+    public void MarkAsCommited()
+    {
+        Version += _uncommitedEvents.Count;
+        _uncommitedEvents.Clear();
+    }
     protected virtual void Apply(DomainEvent @event) { }
 }

@@ -5,12 +5,14 @@ using Modules.Sales.Domain.Orders;
 
 namespace Modules.Sales.Application.Orders.CreateOrder;
 
-public class CreateOrderCommandHandler(IOrderRepository orderRepository) : ICommandHandler<CreateOrderCommand, Unit>
+public class CreateOrderCommandHandler(IEventSourcingRepository<Order, OrderId> eventSourcingRepository) : ICommandHandler<CreateOrderCommand, Unit>
 {
     private readonly IOrderRepository _orderRepository = orderRepository;
 
-    public Task<Result<Unit>> Handle(CreateOrderCommand command, CancellationToken cancellationToken)
+    public async Task<Result<Unit>> Handle(CreateOrderCommand command, CancellationToken cancellationToken)
     {
         var order = Order.Create();
+
+        await _orderRepository.Save
     }
 }

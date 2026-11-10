@@ -9,6 +9,8 @@ public static class InfrastructureDependencyInjection
         public IServiceCollection AddSalesInfrastructure()
         {
             services.AddKurrentDBClient();
+
+            
             return services;
         }
     }

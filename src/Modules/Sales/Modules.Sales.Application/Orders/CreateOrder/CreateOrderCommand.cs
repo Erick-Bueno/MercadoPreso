@@ -5,26 +5,26 @@ using Modules.Sales.Domain.PaymentMethods.Enum;
 namespace Modules.Sales.Application.Orders.CreateOrder;
 
 
-public record InstallmentData(
+public record InstallmentRequest(
     int Count,
     decimal Amount,
     decimal TotalAmount
 );
-public record OrderItemData(
+public record OrderItemRequest(
     Guid ProductId,
     int Quantity,
     decimal UnitPrice
 );
 
-public record PaymentMethodData(
+public record PaymentMethodRequest(
     PaymentType PaymentType,
-    List<InstallmentData>? Installments,
+    List<InstallmentRequest>? Installments,
     string Description
 );
 
 public record CreateOrderCommand(
-    List<OrderItemData> Items,
+    List<OrderItemRequest> Items,
     decimal TotalPrice,
-    PaymentMethodData PaymentMethod
+    PaymentMethodRequest PaymentMethod
 
 ) : ICommand<Unit>;

@@ -1,11 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <ItemGroup>
-    <PackageReference Include="KurrentDB.Client" />
-  </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Modules.Sales.Application\Modules.Sales.Application.csproj" />
   </ItemGroup>
-
 </Project>

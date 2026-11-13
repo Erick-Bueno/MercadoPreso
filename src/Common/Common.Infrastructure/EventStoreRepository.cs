@@ -1,12 +1,13 @@
+
 using System.Text.Json;
+using Common.Application;
 using Common.Domain;
 using KurrentDB.Client;
-using Modules.Sales.Application.Orders.Interfaces;
 
-namespace Modules.Sales.Infrastructure;
+namespace Common.Infrastructure;
 
-public class EventSourcingRepository<T, TId>(KurrentDBClient client) :
-    IEventSourcingRepository<T, TId>
+public class EventStoreRepository<T, TId>(KurrentDBClient client) :
+    IEventStoreRepository<T, TId>
     where T : EventSourcedAggregateRoot<TId> 
     where TId : notnull
 {
@@ -29,7 +30,7 @@ public class EventSourcingRepository<T, TId>(KurrentDBClient client) :
                 : StreamState.StreamRevision((ulong)entity.Version);
 
         await _client.AppendToStreamAsync(
-            $"${typeof(T).Name}-{entity.Id}",
+            $"{typeof(T).Name}-{entity.Id}",
             expected,
             eventsData,
             cancellationToken: cancellationToken

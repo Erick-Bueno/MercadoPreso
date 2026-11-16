@@ -1,8 +1,3 @@
-namespace Modules.Sales.Application.Orders.CreateOrder;
+using Modules.Sales.Domain.Orders;
 
-public static class CreateOrderMapper
-{
-    extension(
-        
-    );
-}
+namespace Modules.Sales.Application.Orders.CreateOrder;

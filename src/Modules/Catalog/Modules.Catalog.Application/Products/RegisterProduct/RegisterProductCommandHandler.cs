@@ -1,6 +1,7 @@
 using Common.Application.Interfaces;
 using Common.Domain;
 using Common.Domain.Extensions;
+using Common.Domain.ValueObjects;
 using Microsoft.Extensions.DependencyInjection;
 using Modules.Catalog.Application.Products.Interfaces;
 using Modules.Catalog.Domain.Products;

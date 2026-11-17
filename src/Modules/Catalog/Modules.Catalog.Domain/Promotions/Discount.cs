@@ -1,5 +1,6 @@
 using Common.Domain;
 using Common.Domain.Extensions;
+using Common.Domain.ValueObjects;
 using Modules.Catalog.Domain.Enums;
 using Modules.Catalog.Domain.Errors;
 

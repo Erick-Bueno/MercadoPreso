@@ -1,4 +1,4 @@
-using Common.Domain;
+using Common.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Modules.Catalog.Domain.Promotions;

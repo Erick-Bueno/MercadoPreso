@@ -1,4 +1,5 @@
 using Common.Domain;
+using Common.Domain.ValueObjects;
 using Modules.Sales.Domain.Orders.Enums;
 using Modules.Sales.Domain.PaymentMethods;
 

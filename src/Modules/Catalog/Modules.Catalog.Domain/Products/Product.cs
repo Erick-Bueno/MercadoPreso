@@ -3,6 +3,7 @@ using Modules.Catalog.Domain.Promotions;
 using Modules.Catalog.Domain.Errors;
 using Common.Domain.Extensions;
 using Modules.Catalog.Domain.Products.Events;
+using Common.Domain.ValueObjects;
 
 namespace Modules.Catalog.Domain.Products;
 

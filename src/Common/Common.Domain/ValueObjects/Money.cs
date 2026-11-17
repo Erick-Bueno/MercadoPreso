@@ -1,6 +1,6 @@
 using Common.Domain.Errors;
 
-namespace Common.Domain;
+namespace Common.Domain.ValueObjects;
 
 public sealed record Price
 {

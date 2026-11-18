@@ -15,13 +15,20 @@ public static class CreateOrderMapper
         public Result<Order> ToOrder(CreateOrderCommand command)
         {
             var totalPrice = Price.Create(command.TotalPrice);
-            if(totalPrice is {IsFailure: true} result)
+            if (totalPrice is { IsFailure: true } result)
             {
                 return result.Error;
             }
-            var installments = Installment
-            var paymentMethod = PaymentMethod.Create(command.PaymentMethod.Description, command.PaymentMethod.PaymentType, )
+            var installments = command.PaymentMethod.Installments.Select(installment => installment)
+            var paymentMethod = PaymentMethod.Create(command.PaymentMethod.Description, command.PaymentMethod.PaymentType)
             var order = Order.Create(totalPrice, );
+        }
+
+        private Result<Installment> ToInstallment(InstallmentRequest installment)
+        {
+            var amount = Price.Create(installment.Amount);
+            var TotalAmount = Price.Create(installment.TotalAmount);
+            var newInstallment = Installment.Create(installment.Count, )
         }
     }
 }

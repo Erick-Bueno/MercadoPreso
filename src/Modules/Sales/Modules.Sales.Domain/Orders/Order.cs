@@ -35,7 +35,7 @@ public class Order : EventSourcedAggregateRoot<OrderId>
             case OrderCreatedDomainEvent orderCreated:
                 Status = OrderStatus.Pending;
                 PaymentMethod = orderCreated.PaymentMethod;
-                _items.AddRange(orderCreated.Items.Select(item => OrderItem.Create(item.ProductId, item.Quantity, item.UnitPrice).Value));
+                _items.AddRange(orderCreated.Items.Select(item => OrderItem.Rehydrate(item.Id, item.ProductId, item.Quantity, item.UnitPrice)));
                 TotalPrice = orderCreated.TotalPrice;
                 break;
         }

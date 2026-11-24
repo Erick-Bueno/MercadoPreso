@@ -27,6 +27,8 @@ public sealed class OrderItem : Entity<OrderItemId>
                 properties.Quantity,
                 properties.UnitPrice
             ));
+    public static OrderItem Rehydrate(OrderItemId id, Guid productId, Quantity quantity, Price unitPrice) 
+        => new(id, productId, quantity, unitPrice);
 }
 
 public readonly record struct OrderItemId(Guid Value)

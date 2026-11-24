@@ -1,5 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\Modules.Sales.Application\Modules.Sales.Application.csproj" />
+    <PackageReference Include="KurrentDB.Client"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore"/>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Modules.Sales.Application\Modules.Sales.Application.csproj"/>
   </ItemGroup>
 </Project>

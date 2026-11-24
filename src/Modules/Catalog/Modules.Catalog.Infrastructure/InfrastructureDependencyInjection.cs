@@ -15,7 +15,6 @@ public static class InfrastructureDependencyInjection
     {
         public IServiceCollection AddCatalogInfrastructure(IConfiguration configuration)
         {
-            services.AddScoped<OutboxInterceptor>();
             services.AddDbContext<CatalogDbContext>((sp, options) =>
                 options
                     .UseNpgsql(

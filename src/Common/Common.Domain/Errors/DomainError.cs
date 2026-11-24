@@ -20,4 +20,14 @@ public sealed record DomainError(HttpStatusCode Code, string Message, ErrorType 
         "Quantidade não pode ser negativo",
         ErrorType.Validation
     );
+    public static readonly DomainError InstallmentCountMustBeGreaterThanZero = new(
+        HttpStatusCode.BadRequest,
+        "Número de parcelas deve ser maior que zero",
+        ErrorType.Validation
+    );
+    public static readonly DomainError InstallmentIntervalMustBeGreaterThanZero = new(
+        HttpStatusCode.BadRequest,
+        "Intervalo de dias entre parcelas deve ser maior que zero",
+        ErrorType.Validation
+    );
 }

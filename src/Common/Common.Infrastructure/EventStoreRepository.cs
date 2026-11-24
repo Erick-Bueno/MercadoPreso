@@ -18,20 +18,20 @@ public class EventStoreRepository<T, TId>(KurrentDBClient client) :
         var entityEvents = entity.GetUncommitedEvents().ToList();
         var eventsData = entityEvents
             .Select(entityEvent => new EventData(
-                Uuid.FromGuid(Guid.CreateVersion7()),
+                Uuid.FromGuid(entity.EventId),
                 entityEvent.GetType().Name,
                 JsonSerializer.SerializeToUtf8Bytes(entityEvent, entityEvent.GetType())
             ))
             .ToArray();
 
-        StreamState expected =
+        StreamState streamState =
             entity.Version == -1
                 ? StreamState.NoStream
                 : StreamState.StreamRevision((ulong)entity.Version);
 
         await _client.AppendToStreamAsync(
             $"{typeof(T).Name}-{entity.Id}",
-            expected,
+            streamState,
             eventsData,
             cancellationToken: cancellationToken
         );

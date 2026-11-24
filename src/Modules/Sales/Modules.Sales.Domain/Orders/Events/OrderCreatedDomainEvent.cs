@@ -6,4 +6,4 @@ using Modules.Sales.Domain.PaymentMethods;
 namespace Modules.Sales.Domain.Orders.Events;
 
 
-public sealed record OrderCreatedDomainEvent(Price TotalPrice, PaymentMethod PaymentMethod, List<OrderItem> Items) : DomainEvent;
+public sealed record OrderCreatedDomainEvent(OrderId Id, Price TotalPrice, PaymentMethod PaymentMethod, List<OrderItem> Items) : DomainEvent;

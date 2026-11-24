@@ -1,5 +1,6 @@
 using Common.Domain;
 using Common.Domain.Errors;
+using Common.Domain.Extensions;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 

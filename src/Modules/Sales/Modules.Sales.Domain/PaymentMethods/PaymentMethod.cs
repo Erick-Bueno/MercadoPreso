@@ -9,7 +9,7 @@ namespace Modules.Sales.Domain.PaymentMethods;
 public class PaymentMethod : AggregateRoot<PaymentMethodId>
 {
     public PaymentType PaymentType { get; private set; }
-    private readonly List<Installment>? _installments = [];
+    public Installment? Installment { get; private set; }
     public string Description { get; private set; }
     public bool IsActive { get; private set; }
 
@@ -17,29 +17,29 @@ public class PaymentMethod : AggregateRoot<PaymentMethodId>
         PaymentMethodId id,
         string description,
         PaymentType paymentType,
-        List<Installment>? installments
+        Installment? installment
     )
         : base(id)
     {
         Description = description;
         PaymentType = paymentType;
-        _installments = installments;
+        Installment = installment;
     }
 
     public static Result<PaymentMethod> Create(
         string description,
         PaymentType paymentType,
-        List<Installment>? installments
+        Installment? installment
     ) =>
         Result
             .Create(
-                (Description: description, PaymentType: paymentType, Installments: installments)
+                (Description: description, PaymentType: paymentType, Installment: installment)
             )
             .Map(properties => new PaymentMethod(
                 PaymentMethodId.New(),
                 properties.Description,
                 properties.PaymentType,
-                properties.Installments
+                properties.Installment
             ));
 }
 

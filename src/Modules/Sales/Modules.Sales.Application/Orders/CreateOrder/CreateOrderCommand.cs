@@ -7,8 +7,7 @@ namespace Modules.Sales.Application.Orders.CreateOrder;
 
 public record InstallmentRequest(
     int Count,
-    decimal Amount,
-    decimal TotalAmount
+    int IntervalInDays
 );
 public record OrderItemRequest(
     Guid ProductId,
@@ -18,7 +17,7 @@ public record OrderItemRequest(
 
 public record PaymentMethodRequest(
     PaymentType PaymentType,
-    List<InstallmentRequest>? Installments,
+    InstallmentRequest? Installment,
     string Description
 );
 

@@ -1,5 +1,3 @@
-using Common.Domain;
-using Common.Infrastructure.Context;
 using Common.Infrastructure.Context.Configurations;
 using Common.Infrastructure.Outbox;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +24,5 @@ public class CatalogDbContext(DbContextOptions<CatalogDbContext> options) : DbCo
         modelBuilder.HasDefaultSchema("catalog");
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(CatalogDbContext).Assembly);
         modelBuilder.ApplyConfiguration(new OutboxConfiguration());
-
-        modelBuilder.ApplyAuditDates();
     }
 }

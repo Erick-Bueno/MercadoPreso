@@ -7,7 +7,8 @@ where TId : notnull
 {
     private readonly List<DomainEvent> _uncommitedEvents = [];
 
-    public int Version { get; set; } = -1;
+    public int Version { get; private set; } = -1;
+    public Guid EventId { get; } = Guid.CreateVersion7();
 
     public IReadOnlyCollection<DomainEvent> GetUncommitedEvents() => _uncommitedEvents.AsReadOnly();
 
